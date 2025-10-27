@@ -29,3 +29,28 @@ npm run dev
 
 The server should now be running and ready for use.
 
+## database structure
+
+### users
+userID: int
+username: str
+password: str
+
+### hotels
+hotelID: int
+Name: str
+City: str
+Country: str
+
+singleRoomPrice: float option
+twinRoomPrice: float option
+doubleRoomPrice: float option
+
+### bookings
+User: int
+Hotel: int
+
+startDate: date
+endDate: date
+
+roomType: str
