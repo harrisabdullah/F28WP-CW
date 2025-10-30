@@ -89,7 +89,7 @@ main {
     gap: 20px;
 }
 
-/* Add media queries for responsiveness */
+/* Adds media queries for responsiveness */
 @media (min-width: 768px) {
     #results-grid {
         /* Go to 2 columns on tablets */

@@ -1,16 +1,16 @@
-/// Wait for the entire HTML document to be loaded before running the script
+/// Waits for the entire HTML document to be loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Get references to the HTML elements we need
+    // Gets references to the HTML elements we need
     const searchForm = document.getElementById('search-form');
     const resultsContainer = document.getElementById('results-grid');
 
-    // Add an event listener for the form's 'submit' event
+    // Adds an event listener for the form's 'submit' event
     searchForm.addEventListener('submit', (event) => {
-        // Prevent the form from doing its default behavior (refreshing the page)
+        // Prevents the form from doing its default behavior (refreshing the page)
         event.preventDefault();
 
-        // 1. Get the values from the form inputs
+        // 1. Gets the values from the form inputs
         const destination = document.getElementById('destination').value;
         const checkIn = document.getElementById('check-in').value;
         const checkOut = document.getElementById('check-out').value;
@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
             guests
         });
 
-        // 3. This is where you will call your API
-        // Your group members working on the API will tell you how to
+        // 3. This is where we will call our API
+        // Group members working on the API will advise how to
         // use 'fetch' to send this data and get results.
         
         // Example of what the API call might look like:
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         */
         
-        // For testing, you can add a fake result:
+        // For testing, we can add a fake result:
         resultsContainer.innerHTML = `
             <article class="hotel-card">
                 <h3>Test Hotel in ${destination}</h3>
@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    // 4. A function to display the results (you'll use this with your API)
+    // 4. A function to display the results (we'll use this with our API)
     function displayResults(hotels) {
-        // Clear any previous results
+        // Clears any previous results
         resultsContainer.innerHTML = '';
 
         if (hotels.length === 0) {
@@ -63,10 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Loop through each hotel in the results and create an HTML card for it
+        // Loops through each hotel in the results and creates an HTML card for it
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
-            hotelCard.className = 'hotel-card'; // Add a class for styling
+            hotelCard.className = 'hotel-card'; // Adds a class for styling
             
             hotelCard.innerHTML = `
                 <img src="${hotel.imageUrl}" alt="${hotel.name}">
