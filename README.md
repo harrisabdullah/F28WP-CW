@@ -108,12 +108,13 @@ We’ll review the changes together to avoid conflicts or overwriting each other
 ### hotels
 
 * `hotelID`: int
-* `Name`: str
-* `City`: str
-* `Country`: str
+* `name`: str
+* `city`: str
+* `country`: str
 * `singleRoomPrice`: float (optional)
 * `twinRoomPrice`: float (optional)
 * `doubleRoomPrice`: float (optional)
+* `starRating`: int
 
 ### bookings
 
