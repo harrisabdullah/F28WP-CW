@@ -42,6 +42,7 @@ All work should be done within **this GitHub repository**:
 
 Before making any changes, make sure you are working on your **own branch** (not `main`).
 
+!IMPORTANT! : One person per branch!!!!
 
 ### Step-by-Step Guide
 
