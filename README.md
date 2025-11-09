@@ -91,11 +91,17 @@ Make sure you **commit or stash** your changes before switching branches, or Git
 
 ### Merging Branches
 
-Toward the end of the project, we will **merge everyone’s branches into `main`**.
+#### Making a Pull Request (PR)
 
-Each person will create a **pull request (PR)** on GitHub to merge their branch into `main`.
-We’ll review the changes together to avoid conflicts or overwriting each other’s work.
+Once you’ve pushed your branch to GitHub:
+* Go to the repository on GitHub:
+https://github.com/harrisabdullah/F28WP-CW
+* You should see a prompt suggesting you create a pull request for your new branch. Click “Compare & pull request.”
+* Write a short title and description explaining what you changed.
+* Set the base branch to main and the compare branch to your branch.
+* Click “Create pull request.”
 
+We will review and merge all pull requests when we meet.
 
 ## Database Structure
 
