@@ -5,6 +5,8 @@ const port = 3000
 
 const db = require('./dbinit')
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // pages
 
 app.get('/', (req, res) => {
