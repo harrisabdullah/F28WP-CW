@@ -32,7 +32,6 @@ npm run dev
 
 The server should now be running and ready for use.
 
----
 
 ## Contributing
 
@@ -43,7 +42,6 @@ All work should be done within **this GitHub repository**:
 
 Before making any changes, make sure you are working on your **own branch** (not `main`).
 
----
 
 ### Step-by-Step Guide
 
@@ -74,7 +72,6 @@ Before making any changes, make sure you are working on your **own branch** (not
    git push origin your-branch-name
    ```
 
----
 
 ### Switching Between Branches
 
@@ -92,7 +89,6 @@ git branch -a
 
 Make sure you **commit or stash** your changes before switching branches, or Git will not allow you to switch.
 
----
 
 ### Merging Branches
 
@@ -101,7 +97,6 @@ Toward the end of the project, we will **merge everyone’s branches into `main`
 Each person will create a **pull request (PR)** on GitHub to merge their branch into `main`.
 We’ll review the changes together to avoid conflicts or overwriting each other’s work.
 
----
 
 ## Database Structure
 
