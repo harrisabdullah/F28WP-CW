@@ -38,7 +38,19 @@ app.get('/hotels/:hotelId', (req, res) => {
 // APIs
 
 app.get('/api/search', (req, res) => {
-    search(db, req, res);
+    const query = search(req.body);
+    if (query == -1){
+        res.status(400).json({ error: 'Invalid request' });
+        return;
+    }
+    db.all(query[0], query[1], (err, rows) => {
+        if (err){
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            return;
+        }
+        req.json(rows);
+    })
 })
 
 app.listen(port, () => {
