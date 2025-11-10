@@ -121,6 +121,7 @@ We will review and merge all pull requests when we meet.
 * `twinRoomPrice`: float (optional)
 * `doubleRoomPrice`: float (optional)
 * `starRating`: int
+* `image`: str
 
 ### bookings
 
