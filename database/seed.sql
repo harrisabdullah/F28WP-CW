@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS Hotels (
     singleRoomPrice REAL,
     twinRoomPrice REAL,
     doubleRoomPrice REAL,
-    starRating int
+    penthousePrice REAL,
+    starRating INTEGER,
+    image TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Bookings (

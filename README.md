@@ -117,10 +117,12 @@ We will review and merge all pull requests when we meet.
 * `name`: str
 * `city`: str
 * `country`: str
-* `singleRoomPrice`: float (optional)
-* `twinRoomPrice`: float (optional)
-* `doubleRoomPrice`: float (optional)
+* `singleRoomPrice`: float 
+* `twinRoomPrice`: float
+* `doubleRoomPrice`: float 
+* `penthousePrice`: float 
 * `starRating`: int
+* `image`: str
 
 ### bookings
 
