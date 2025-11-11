@@ -22,13 +22,13 @@ db.exec(seedSQL, (err) => {
 
         if (row.count === 0) {
             const insertSQL = `
-                INSERT INTO Hotels (name, city, country, singleRoomPrice, twinRoomPrice, doubleRoomPrice, starRating, image)
+                INSERT INTO Hotels (name, city, country, singleRoomPrice, twinRoomPrice, doubleRoomPrice, penthousePrice, starRating, image)
                 VALUES
-                ('Hotel Aurora', 'London', 'UK', 120.0, 180.0, 220.0, 5, 'aurora.jpg'),
-                ('Seaside Inn', 'Brighton', 'UK', 90.0, 140.0, 170.0, 4, 'seaside.jpg'),
-                ('Mountain Lodge', 'Inverness', 'UK', 100.0, 160.0, 200.0, 4, 'mountain.jpg'),
-                ('City Central', 'Manchester', 'UK', 80.0, 120.0, 150.0, 3, 'central.jpg'),
-                ('The Riverside', 'Cambridge', 'UK', 110.0, 170.0, 210.0, 5, 'riverside.jpg');
+                ('Hotel Aurora', 'London', 'UK', 120.0, 180.0, 220.0, 600.0, 5, 'aurora.jpg'),
+                ('Seaside Inn', 'Brighton', 'UK', 90.0, 140.0, 170.0, 500.0, 4, 'seaside.jpg'),
+                ('Mountain Lodge', 'Inverness', 'UK', 100.0, 160.0, 200.0, 300.0, 4, 'mountain.jpg'),
+                ('City Central', 'Manchester', 'UK', 80.0, 120.0, 150.0, 350.0, 3, 'central.jpg'),
+                ('The Riverside', 'Cambridge', 'UK', 110.0, 170.0, 210.0, 400.0, 5, 'riverside.jpg');
             `;
             db.run(insertSQL, (err) => {
                 if (err) console.error('Error inserting sample hotels', err);
