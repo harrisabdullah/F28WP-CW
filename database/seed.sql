@@ -23,6 +23,9 @@ CREATE TABLE IF NOT EXISTS Bookings (
     hotel INTEGER REFERENCES Hotels(id),
     startDate DATE,
     endDate DATE,
-    roomType TEXT
+    singleCount INTEGER,
+    doubleCount INTEGER,
+    twinCount INTEGER,
+    penthouseCount INTEGER
 );
 
