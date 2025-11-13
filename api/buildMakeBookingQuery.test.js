@@ -7,12 +7,12 @@ test('basic sucsess', () => {
         startDate: '3025-01-01',
         endDate: '3025-01-02',
         roomConfig: {
-            single: 1,
-            double: 0,
-            twin: 0,
-            penthouse: 0,
+            single: 4,
+            double: 5,
+            twin: 6,
+            penthouse: 7,
         }
     })
-    expect(query[0]).toBe('INSERT INTO Bookings (user, hotel, startDate, endDate, roomType) VALUES (?, ?, ?, ?, ?)');
-    expect(query[1]).toStrictEqual([1, 2, '3025-01-01', '3025-01-02', ]);
+    expect(query[0]).toBe('INSERT INTO Bookings (user, hotel, startDate, endDate, singleCount, doubleCount, twinCount, penthouseCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+    expect(query[1]).toStrictEqual([1, 2, '3025-01-01', '3025-01-02', 4, 5, 6, 7]);
 })
