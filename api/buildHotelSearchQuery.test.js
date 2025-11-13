@@ -26,7 +26,6 @@ test('min price test', () => {
             penthouse: 0,
         }
     })
-    console.log(query);
     expect(query[0]).toBe('SELECT * FROM hotels WHERE ((singleRoomPrice * ? + twinRoomPrice * ? + doubleRoomPrice * ? + penthousePrice * ?) * ?) > ?');
     expect(query[1]).toStrictEqual([1, 0, 0, 0, 1, 2.0]);
 })
@@ -43,7 +42,6 @@ test('max price test', () => {
             penthouse: 0,
         }
     })
-    console.log(query);
     expect(query[0]).toBe('SELECT * FROM hotels WHERE ((singleRoomPrice * ? + twinRoomPrice * ? + doubleRoomPrice * ? + penthousePrice * ?) * ?) < ?');
     expect(query[1]).toStrictEqual([1, 0, 0, 0, 1, 2.0]);
 })
@@ -61,7 +59,6 @@ test('min and max price test', () => {
             penthouse: 0,
         }
     })
-    console.log(query);
     expect(query[0]).toBe('SELECT * FROM hotels WHERE ((singleRoomPrice * ? + twinRoomPrice * ? + doubleRoomPrice * ? + penthousePrice * ?) * ?) > ? AND ((singleRoomPrice * ? + twinRoomPrice * ? + doubleRoomPrice * ? + penthousePrice * ?) * ?) < ?');
     expect(query[1]).toStrictEqual([1, 0, 0, 0, 1, 1.0, 1, 0, 0, 0, 1, 2.0]);
 })
@@ -80,7 +77,6 @@ test('name, min and max price test', () => {
             penthouse: 4,
         }
     })
-    console.log(query);
     expect(query[0]).toBe('SELECT * FROM hotels WHERE name = ? AND ((singleRoomPrice * ? + twinRoomPrice * ? + doubleRoomPrice * ? + penthousePrice * ?) * ?) > ? AND ((singleRoomPrice * ? + twinRoomPrice * ? + doubleRoomPrice * ? + penthousePrice * ?) * ?) < ?');
     expect(query[1]).toStrictEqual(["test", 1, 2, 3, 4, 3, 1.0, 1, 2, 3, 4, 3, 2.0]);
 })

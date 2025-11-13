@@ -1,13 +1,4 @@
-
-/**
- * Checks if a value is a number greater than or equal to zero.
- *
- * @param {any} n - The value to check.
- * @returns {boolean} True if `n` is a number and >= 0, false otherwise.
- */
-function isNumOverEqualZero(n){
-    return typeof n === 'number' && n >= 0;
-}
+const { testSchema, roomConfigSchema } = require('./schema');
 
 /**
  * Checks if a string represents a valid date in the future.
@@ -26,14 +17,6 @@ function isValidDateInFuture(str) {
            date > now;
 }
 
-// Defines schemas as objects mapping property names to validation functions.
-const roomConfigSchema = {
-    'single': isNumOverEqualZero,
-    'double': isNumOverEqualZero,
-    'twin': isNumOverEqualZero,
-    'penthouse': isNumOverEqualZero,
-}
-
 const querySchema = {
     'name':        val => typeof val === 'string',
     'minPrice':   val => typeof val === 'number' && val >= 0.0,
@@ -41,29 +24,6 @@ const querySchema = {
     'startDate':  val => typeof val === 'string' && isValidDateInFuture(val),
     'endDate':    val => typeof val === 'string' && isValidDateInFuture(val),
     'roomConfig': val => typeof val === 'object'
-}
-
-/**
- * Tests whether an object conforms to a given schema.
- *
- * @param {Object} schema - An object where keys correspond to expected properties
- *   in `obj` and values are functions that take a property value and return a boolean
- *   indicating whether the value is valid.
- * @param {Object} obj - The object to validate against the schema.
- * @param {boolean} strict - If true, all keys in `obj` must exist in `schema` and pass
- *   their corresponding validation functions. If false, only keys present in `schema`
- *   are validated; extra keys in `obj` are ignored.
- *
- * @returns {boolean} True if `obj` passes the schema validation according to `strict`,
- *   false otherwise.
- */
-function testSchema(schema, obj, strict){
-    if (strict){
-        return Object.entries(obj).every(([key, value]) => 
-                schema[key]? schema[key](value) : false);
-    }
-    return Object.entries(obj).every(([key, value]) => 
-            schema[key]? schema[key](value) : true);
 }
 
 /**
