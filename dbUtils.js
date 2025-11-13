@@ -72,13 +72,15 @@ function dbinit(){
 
         if (row.count === 0) {
             const insertBookings = `
-                INSERT INTO Bookings (user, hotel, startDate, endDate, roomType)
+                INSERT INTO Bookings (user, hotel, startDate, endDate, singleCount, doubleCount, twinCount, penthouseCount)
                 VALUES
-                (1, 1, '2025-01-05', '2025-01-10', 'Double'),
-                (2, 3, '2025-02-12', '2025-02-15', 'Twin'),
-                (3, 2, '2025-03-01', '2025-03-05', 'Single'),
-                (4, 4, '2025-04-10', '2025-04-14', 'Penthouse'),
-                (5, 5, '2025-05-20', '2025-05-25', 'Double');
+                    (1, 1, '2025-01-05', '2025-01-10', 1, 1, 0, 0),
+                    (2, 3, '2025-02-12', '2025-02-15', 0, 1, 2, 0),
+                    (3, 2, '2025-03-01', '2025-03-05', 2, 0, 0, 0),
+                    (4, 4, '2025-04-10', '2025-04-14', 0, 1, 0, 1),
+                    (5, 5, '2025-05-20', '2025-05-25', 1, 1, 1, 0),
+                    (6, 2, '2025-06-15', '2025-06-20', 0, 2, 1, 0),
+                    (7, 1, '2025-07-05', '2025-07-10', 1, 0, 1, 1);
             `;
             db.run(insertBookings, (err) => {
                 if (err) console.error('Error inserting sample bookings', err);
@@ -93,4 +95,4 @@ function dbinit(){
     return db;
 }
 
-module.export = { dbinit };
+module.exports = { dbinit };
