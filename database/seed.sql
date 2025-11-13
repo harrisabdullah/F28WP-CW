@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS Hotels (
 );
 
 CREATE TABLE IF NOT EXISTS Bookings (
+    bookingID INTEGER PRIMARY KEY AUTOINCREMENT,
     user INTEGER REFERENCES Users(id),
     hotel INTEGER REFERENCES Hotels(id),
     startDate DATE,

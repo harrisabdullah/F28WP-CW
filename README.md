@@ -126,8 +126,9 @@ We will review and merge all pull requests when we meet.
 
 ### bookings
 
-* `User`: int
-* `Hotel`: int
+* 'bookingID': int 
+* `user`: int
+* `hotel`: int
 * `startDate`: date
 * `endDate`: date
 * `roomType`: str
