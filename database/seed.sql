@@ -26,6 +26,6 @@ CREATE TABLE IF NOT EXISTS Bookings (
     singleCount INTEGER,
     doubleCount INTEGER,
     twinCount INTEGER,
-    penthouseCount INTEGER,
+    penthouseCount INTEGER
 );
 
