@@ -102,35 +102,3 @@ https://github.com/harrisabdullah/F28WP-CW
 * Click “Create pull request.”
 
 We will review and merge all pull requests when we meet.
-
-## Database Structure
-
-### users
-
-* `userID`: int
-* `username`: str
-* `password`: str
-
-### hotels
-
-* `hotelID`: int
-* `name`: str
-* `city`: str
-* `country`: str
-* `singleRoomPrice`: float 
-* `twinRoomPrice`: float
-* `doubleRoomPrice`: float 
-* `penthousePrice`: float 
-* `starRating`: int
-* `image`: str
-
-### bookings
-
-* 'bookingID': int 
-* `user`: int
-* `hotel`: int
-* `startDate`: date
-* `endDate`: date
-* `roomType`: str
-
-
