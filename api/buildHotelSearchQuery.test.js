@@ -1,4 +1,4 @@
-const search = require('./search');
+const search = require('./buildHotelSearchQuery');
 
 test('blanck test', () => {
     let query = search({});
