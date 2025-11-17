@@ -7,6 +7,7 @@ const { dbinit, rowExists } = require('./dbUtils')
 const buildHotelSearchQuery = require('./api/buildHotelSearchQuery')
 const buildMakeBookingQuery = require('./api/buildMakeBookingQuery')
 const buildCancelBookingQuery = require('./api/buildCancelBookingQuery')
+const buildGetBookingsQuery = require('./api/buildGetBookingsQuery')
 
 db = dbinit();
 
@@ -83,7 +84,6 @@ app.post('/api/make_booking', async (req, res) => {
 })
 
 app.post('/api/cancel_booking', async (req, res) => {
-    console.log("here");
     const query = buildCancelBookingQuery(req.body);
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
@@ -113,6 +113,22 @@ app.post('/api/cancel_booking', async (req, res) => {
             return;
         }
         res.status(200).json({ message: 'Booking canceled successfully' });
+    })
+})
+
+app.get('/api/get_bookings', (req, res) => {
+    const query = buildGetBookingsQuery(req.body);
+    if (query == -1){
+        res.status(400).json({ error: 'Invalid request' });
+        return;
+    }
+    db.all(query[0], query[1], (err, rows) => {
+        if (err){
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            return;
+        }
+        res.json(rows);
     })
 })
 
