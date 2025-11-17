@@ -6,6 +6,7 @@ const port = 3000
 const { dbinit, rowExists } = require('./dbUtils')
 const buildHotelSearchQuery = require('./api/buildHotelSearchQuery')
 const buildMakeBookingQuery = require('./api/buildMakeBookingQuery')
+const buildCancelBookingQuery = require('./api/buildCancelBookingQuery')
 
 db = dbinit();
 
@@ -79,7 +80,41 @@ app.post('/api/make_booking', async (req, res) => {
         }
         res.json({ bookingID: this.lastID });
     });
-});
+})
+
+app.post('/api/cancel_booking', async (req, res) => {
+    console.log("here");
+    const query = buildCancelBookingQuery(req.body);
+    if (query == -1){
+        res.status(400).json({ error: 'Invalid request' });
+        return;
+    }
+    db.get('SELECT * FROM Bookings WHERE bookingID = ?', [req.body.bookingID], (err, row) => {
+    if (err) {
+        console.error('Database error:', err.message);
+        res.status(500).json({ error: 'Database error' });
+        return;
+    }
+    if (row) {
+        if (row.user != req.body.userID){
+        res.status(400).json({ error: 'Permission denied' });
+        return;
+        }
+    } else {
+        res.status(400).json({ error: 'Booking not found' });
+        return;
+    }
+    });
+
+    db.run(query[0], query[1], (err) => {
+        if (err){
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            return;
+        }
+        res.status(200).json({ message: 'Booking canceled successfully' });
+    })
+})
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)
