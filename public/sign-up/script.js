@@ -2,8 +2,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // Gets references to the HTML elements we need
-    const searchForm = document.getElementById('search-form');
-    const resultsContainer = document.getElementById('results-grid');
+    const signupForm = document.getElementById('signup-form');
+   
 
     // Adds an event listener for the form's 'submit' event
     searchForm.addEventListener('submit', (event) => {
@@ -49,30 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
-    // 4. A function to display the results (we'll use this with our API)
-    function displayResults(hotels) {
-        // Clears any previous results
-        resultsContainer.innerHTML = '';
-
-        if (hotels.length === 0) {
-            resultsContainer.innerHTML = '<p>No hotels found matching your criteria.</p>';
-            return;
-        }
-
-        // Loops through each hotel in the results and creates an HTML card for it
-        hotels.forEach(hotel => {
-            const hotelCard = document.createElement('article');
-            hotelCard.className = 'hotel-card'; // Adds a class for styling
-            
-            hotelCard.innerHTML = `
-                <img src="${hotel.imageUrl}" alt="${hotel.name}">
-                <h3>${hotel.name}</h3>
-                <p>${hotel.location}</p>
-                <p><strong>£${hotel.pricePerNight}</strong> / night</p>
-            `;
-            
-            resultsContainer.appendChild(hotelCard);
-        });
-    }
+  
 
 });

@@ -1,7 +1,7 @@
 /* Using CSS variables for easy-to-change colors */
 :root {
     --primary-color: #007bff;
-    --light-gray: #f4f4f4;
+    --light-gray: #eae6e6;
     --dark-gray: #333;
     --border-radius: 8px;
     --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
