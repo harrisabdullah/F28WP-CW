@@ -1,82 +1,97 @@
-/// Waits for the entire HTML document to be loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
+    const bookingsGrid = document.getElementById('bookings-grid');
 
-    // Gets references to the HTML elements we need
-    const searchForm = document.getElementById('search-form');
-    const resultsContainer = document.getElementById('results-grid');
+    // Helper to get cookie by name
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
-    // Adds an event listener for the form's 'submit' event
-    searchForm.addEventListener('submit', (event) => {
-        // Prevents the form from doing its default behavior (refreshing the page)
-        event.preventDefault();
+    // Check for userID in cookies
+    const userID = getCookie('userID');
+    if (!userID) {
+        // Redirect to login if no userID
+        window.location.href = '/login';
+        return;
+    }
 
-        // 1. Gets the values from the form inputs
-        const destination = document.getElementById('destination').value;
-        const checkIn = document.getElementById('check-in').value;
-        const checkOut = document.getElementById('check-out').value;
-        const guests = document.getElementById('guests').value;
-
-        // 2. (For now) Log the data to the console to make sure it's working
-        console.log('Search criteria:', {
-            destination,
-            checkIn,
-            checkOut,
-            guests
-        });
-
-        // 3. This is where we will call our API
-        // Group members working on the API will advise how to
-        // use 'fetch' to send this data and get results.
-        
-        // Example of what the API call might look like:
-        /*
-        fetch(`https://your-group-api.com/search?dest=${destination}&checkin=${checkIn}&checkout=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the list of hotels from the API
-                displayResults(data);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = '<p>Sorry, something went wrong. Please try again.</p>';
+    // Function to fetch and display bookings
+    async function fetchBookings() {
+        try {
+            const response = await fetch(`https://our-group-api.com/api/get_bookings?userID=${userID}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
             });
-        */
-        
-        // For testing, we can add a fake result:
-        resultsContainer.innerHTML = `
-            <article class="hotel-card">
-                <h3>Test Hotel in ${destination}</h3>
-                <p>Check-in: ${checkIn}</p>
-                <p>Guests: ${guests}</p>
-            </article>
-        `;
+            if (!response.ok) throw new Error('Failed to fetch bookings');
+            const bookings = await response.json();
 
-    });
+            displayBookings(bookings);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+            window.location.href = '/error?msg=Failed%20to%20load%20bookings.%20Please%20try%20again.';
+        }
+    }
 
-    // 4. A function to display the results (we'll use this with our API)
-    function displayResults(hotels) {
-        // Clears any previous results
-        resultsContainer.innerHTML = '';
+    // Function to display bookings
+    function displayBookings(bookings) {
+        bookingsGrid.innerHTML = ''; // Clear previous content
 
-        if (hotels.length === 0) {
-            resultsContainer.innerHTML = '<p>No hotels found matching your criteria.</p>';
+        if (bookings.length === 0) {
+            bookingsGrid.innerHTML = '<p>You have no bookings yet.</p>';
             return;
         }
 
-        // Loops through each hotel in the results and creates an HTML card for it
-        hotels.forEach(hotel => {
-            const hotelCard = document.createElement('article');
-            hotelCard.className = 'hotel-card'; // Adds a class for styling
-            
-            hotelCard.innerHTML = `
-                <img src="${hotel.imageUrl}" alt="${hotel.name}">
-                <h3>${hotel.name}</h3>
-                <p>${hotel.location}</p>
-                <p><strong>£${hotel.pricePerNight}</strong> / night</p>
+        bookings.forEach(booking => {
+            const bookingCard = document.createElement('div');
+            bookingCard.className = 'booking-card';
+
+            const roomConfig = booking.roomConfig;
+            bookingCard.innerHTML = `
+                <img src="${booking.image}" alt="${booking.name}">
+                <h3>${booking.name}</h3>
+                <p>Dates: ${booking.startDate} to ${booking.endDate}</p>
+                <p>Rooms: Single: ${roomConfig.single}, Double: ${roomConfig.double}, Twin: ${roomConfig.twin}, Penthouse: ${roomConfig.penthouse}</p>
+                <p>Price: £${booking.price}</p>
+                <p>Contact: fakehotel@email.com (fake for demo)</p>
+                <button class="cancel-button" data-booking-id="${booking.bookingID}">Cancel Booking</button>
             `;
-            
-            resultsContainer.appendChild(hotelCard);
+
+            bookingsGrid.appendChild(bookingCard);
+        });
+
+        // Add event listeners for cancel buttons
+        document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const bookingID = event.target.getAttribute('data-booking-id');
+                await cancelBooking(bookingID);
+            });
         });
     }
 
+    // Function to cancel a booking
+    async function cancelBooking(bookingID) {
+        try {
+            const response = await fetch('https://our-group-api.com/api/cancel_booking', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bookingID: parseInt(bookingID) })
+            });
+            if (!response.ok) throw new Error('Failed to cancel booking');
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Booking cancelled successfully!');
+                fetchBookings(); // Refresh the list
+            } else {
+                throw new Error('Cancellation failed');
+            }
+        } catch (error) {
+            console.error('Error cancelling booking:', error);
+            window.location.href = '/error?msg=Failed%20to%20cancel%20booking.%20Please%20try%20again.';
+        }
+    }
+
+    // Initial fetch
+    fetchBookings();
 });
