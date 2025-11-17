@@ -79,7 +79,11 @@ app.post('/api/make_booking', async (req, res) => {
         }
         res.json({ bookingID: this.lastID });
     });
-});
+})
+
+app.post('api/cancel_booking', (req, res) => {
+    
+})
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)
