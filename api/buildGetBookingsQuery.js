@@ -1,4 +1,4 @@
-const { testSchema, roomConfigSchema } = require('./schema');
+const { testSchema, _ } = require('./schema');
 
 const getBookingSchema = {
     'userID': val => Number.isInteger(val)
