@@ -7,7 +7,7 @@ const { dbinit, rowExists } = require('./dbUtils')
 const buildHotelSearchQuery = require('./api/buildHotelSearchQuery')
 const buildMakeBookingQuery = require('./api/buildMakeBookingQuery')
 const buildCancelBookingQuery = require('./api/buildCancelBookingQuery')
-const buildGetBookingsQuery = require('./api/buildGetBookingsQuery')
+const buildGetterQuery = require('./api/buildGetterQuery')
 
 db = dbinit();
 
@@ -117,7 +117,7 @@ app.post('/api/cancel_booking', async (req, res) => {
 })
 
 app.get('/api/get_bookings', (req, res) => {
-    const query = buildGetBookingsQuery(req.body);
+    const query = buildGetterQuery(req.body, 'Bookings', 'user');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
         return;
@@ -129,6 +129,26 @@ app.get('/api/get_bookings', (req, res) => {
             return;
         }
         res.json(rows);
+    })
+})
+
+app.get('/api/get_hotel', (req, res) => {
+    const query = buildGetterQuery(req.body, 'Hotels', 'hotelID');
+    if (query == -1){
+        res.status(400).json({ error: 'Invalid request' });
+        return;
+    }
+    db.get(query[0], query[1], (err, row) => {
+        if (err){
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            return;
+        }
+        if (row){
+            res.json(row);
+            return;
+        }
+        res.status(400).json({ error: 'Hotel not found' });
     })
 })
 
