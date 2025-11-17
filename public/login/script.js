@@ -26,7 +26,9 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         if (data.userID) {
             document.cookie = `userID=${data.userID}; path =/; max age=86400`;
 
-            console.log("saved userID into cookie", data.userID)
+            window.location.href = window.location.origin;   
+        } else {
+            passwordError.textContent = "Invalid username or password.";
         }
         
     })

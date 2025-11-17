@@ -56,6 +56,13 @@ main {
   border-radius: 6px;
 }
 
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 2px;
+    min-height: 1em; /* ensures space even if no message */
+}
+
 /* This uses Flexbox to arrange the form fields nicely */
 #login-form {
     display: flex;
