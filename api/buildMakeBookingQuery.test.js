@@ -1,22 +1,17 @@
 const buildMakeBookingQuery = require('./buildMakeBookingQuery');
 
 const validBody = {
+  hotelID: 1,
   userID: 1,
-  hotelID: 2,
-  startDate: '2999-01-01',
-  endDate: '2999-01-02',
-  roomConfig: {
-    single: 1,
-    double: 1,
-    twin: 0,
-    penthouse: 0
-  }
+  startDate: '2030-01-01',
+  endDate: '2030-01-02',
+  roomConfig: { single: 1, double: 0, twin: 0, penthouse: 0 }
 };
 
 test('basic sucsess', () => {
     let query = buildMakeBookingQuery(validBody);
     expect(query[0]).toBe('INSERT INTO Bookings (user, hotel, startDate, endDate, singleCount, doubleCount, twinCount, penthouseCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-    expect(query[1]).toStrictEqual([1, 2, '2999-01-01', '2999-01-02', 1, 1, 0, 0]);
+    expect(query[1]).toStrictEqual([1, 1, '2030-01-01', '2030-01-02', 1, 0, 0, 0]);
 })
 
 test('fails when body is missing required key', () => {

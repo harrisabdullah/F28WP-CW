@@ -1,6 +1,9 @@
 const { testSchema, roomConfigSchema } = require('./schema');
 
 function isValidDateInFuture(str) {
+    if (typeof str != 'string'){
+        return false;
+    }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(str)) return false;
     const [year, month, day] = str.split('-').map(Number);
     const date = new Date(str);

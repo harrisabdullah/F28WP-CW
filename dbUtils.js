@@ -95,4 +95,15 @@ function dbinit(){
     return db;
 }
 
-module.exports = { dbinit };
+async function rowExists(db, table, field, value) {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT 1 FROM ${table} WHERE ${field} = ? LIMIT 1`;
+
+    db.get(sql, [value], (err, row) => {
+      if (err) return reject(err);
+      resolve(!!row);
+    });
+  });
+}
+
+module.exports = { dbinit, rowExists };
