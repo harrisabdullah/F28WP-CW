@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-/* Reusing some variables from search page for consistency */
-=======
 /* Using CSS variables for easy-to-change colors */
->>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
 :root {
     --primary-color: #007bff;
     --light-gray: #f4f4f4;
     --dark-gray: #333;
     --border-radius: 8px;
     --box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-<<<<<<< HEAD
-    --danger-color: #dc3545; /* For cancel button */
-=======
->>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
 }
 
 body {
@@ -32,62 +24,17 @@ header {
 
 main {
     max-width: 1200px;
-<<<<<<< HEAD
-    margin: 20px auto;
-    padding: 20px;
-}
-
-#bookings-container {
-=======
     margin: 20px auto; /* Centers the content */
     padding: 20px;
 }
 
 .search-container {
->>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
     background-color: white;
     padding: 24px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
 
-<<<<<<< HEAD
-#bookings-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-.booking-card {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    padding: 16px;
-    box-shadow: var(--box-shadow);
-}
-
-.booking-card h3 {
-    margin-top: 0;
-}
-
-.cancel-button {
-    background-color: var(--danger-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.cancel-button:hover {
-    background-color: #c82333;
-}
-
-/* Responsiveness */
-@media (min-width: 768px) {
-    #bookings-grid {
-=======
 /* This uses Flexbox to arrange the form fields nicely */
 #search-form {
     display: flex;
@@ -146,21 +93,13 @@ main {
 @media (min-width: 768px) {
     #results-grid {
         /* Go to 2 columns on tablets */
->>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (min-width: 1024px) {
-<<<<<<< HEAD
-    #bookings-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-}
-=======
     #results-grid {
         /* Go to 3 columns on desktops */
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
->>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
