@@ -61,7 +61,7 @@ app.post('/api/search', (req, res) => {
     })
 })
 
-app.post('/api/make_booking', async (req, res) => {
+app.post('/api/makeBooking', async (req, res) => {
     const query = buildMakeBookingQuery(req.body);
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
@@ -86,7 +86,7 @@ app.post('/api/make_booking', async (req, res) => {
     });
 })
 
-app.post('/api/cancel_booking', async (req, res) => {
+app.post('/api/cancelBooking', async (req, res) => {
     const query = buildCancelBookingQuery(req.body);
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
@@ -119,7 +119,7 @@ app.post('/api/cancel_booking', async (req, res) => {
     })
 })
 
-app.get('/api/get_bookings', (req, res) => {
+app.get('/api/getBookings', (req, res) => {
     const query = buildGetterQuery(req.body, 'Bookings', 'user');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
@@ -135,7 +135,7 @@ app.get('/api/get_bookings', (req, res) => {
     })
 })
 
-app.get('/api/get_hotel', (req, res) => {
+app.get('/api/getHotel', (req, res) => {
     const query = buildGetterQuery(req.body, 'Hotels', 'hotelID');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
