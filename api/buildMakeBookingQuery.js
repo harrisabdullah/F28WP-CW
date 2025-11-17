@@ -1,5 +1,15 @@
 const { testSchema, roomConfigSchema } = require('./schema');
 
+/**
+ * Checks if a given string represents a valid date in the future.
+ *
+ * The string must be in the format "YYYY-MM-DD". Returns false if the string
+ * is not in the correct format, cannot be parsed as a valid date, or represents
+ * a date that is today or in the past.
+ *
+ * @param {string} str - The date string to validate.
+ * @returns {boolean} True if the string is a valid future date, false otherwise.
+ */
 function isValidDateInFuture(str) {
     if (typeof str != 'string'){
         return false;
@@ -22,6 +32,28 @@ const makeBookingSchema = {
     'roomConfig': val => testSchema(roomConfigSchema, val, true)
 }
 
+/**
+ * Generates a SQL query and its parameters for creating a new booking.
+ *
+ * @param {Object} body - JavaScript object containing booking data.
+ *   Example fields:
+ *     - userID: number
+ *     - hotelID: number
+ *     - startDate: string (YYYY-MM-DD)
+ *     - endDate: string (YYYY-MM-DD)
+ *     - roomConfig: {
+ *                      single: number,
+ *                      double: number,
+ *                      twin: number,
+ *                      penthouse: number
+ *                    }
+ *
+ * @returns {Array|number} Returns an array of the form:
+ *   [sqlQueryString, parametersArray]
+ *   - sqlQueryString: string containing SQL with placeholders
+ *   - parametersArray: array of values to substitute in the query
+ * Returns -1 if input validation fails or startDate is not before endDate.
+ */
 function buildMakeBookingQuery(body){
     if (!testSchema(makeBookingSchema, body, true)){
         return -1;

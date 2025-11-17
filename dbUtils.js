@@ -5,6 +5,13 @@ const path = require('path');
 const dbPath = path.resolve(__dirname, 'database', 'db.sqlite');
 const seedPath = path.resolve(__dirname, 'database', 'seed.sql');
 
+/**
+ * Initializes the SQLite database by executing the seed SQL file.
+ * Populates the Users, Hotels, and Bookings tables with sample data
+ * if they are empty. Returns the database instance.
+ *
+ * @returns {sqlite3.Database} The initialized SQLite database object.
+ */
 function dbinit(){
     const db = new sqlite3.Database(dbPath);
     const seedSQL = fs.readFileSync(seedPath, 'utf-8');
@@ -95,6 +102,15 @@ function dbinit(){
     return db;
 }
 
+/**
+ * Checks if a row exists in a given table with a specific field value.
+ *
+ * @param {sqlite3.Database} db - The SQLite database object.
+ * @param {string} table - The table name to check.
+ * @param {string} field - The field/column name to check.
+ * @param {*} value - The value to search for in the field.
+ * @returns {Promise<boolean>} A promise that resolves to true if the row exists, false otherwise.
+ */
 async function rowExists(db, table, field, value) {
   return new Promise((resolve, reject) => {
     const sql = `SELECT 1 FROM ${table} WHERE ${field} = ? LIMIT 1`;
