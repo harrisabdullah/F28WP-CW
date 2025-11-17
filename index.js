@@ -213,3 +213,23 @@ app.post('/api/signup', (req, res) => {
         
     })
 })
+
+app.get('/api/getBooking', (req, res) => {
+    const userID = parseInt(req.query.userID);
+
+    if(!userID) {
+        return res.status(400).json({ error: 'UserID is required' });
+    }
+
+    const query = 'SELECT user, hotel, startDate, endDate, singleCount, doubleCount, twinCount, penthouseCount FROM bookings WHERE user = ?'
+
+    db.all(query, [userID], (err, rows) => {
+        if(err){
+            console.error(err)
+            return res.status(500).json({ message: 'Database error. '})
+        }
+
+        res.status(200).json(rows);
+
+    })
+})
