@@ -1,6 +1,5 @@
-/* Using CSS variables for easy-to-change colors */
 :root {
-    --primary-color: #159db9;
+    --primary-color: rgb(21, 157, 185);
     --light-gray: #f4f4f4;
     --dark-gray: #333;
     --border-radius: 8px;
@@ -28,7 +27,7 @@ main {
     padding: 20px;
 }
 
-.search-container {
+.login-container {
     background-color: white;
     padding: 24px;
     border-radius: var(--border-radius);
@@ -36,7 +35,7 @@ main {
 }
 
 /* This uses Flexbox to arrange the form fields nicely */
-#search-form {
+#login-form {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap to the next line on small screens */
     gap: 16px; /* Adds space between form items */
@@ -60,33 +59,6 @@ main {
     border: 1px solid #ccc;
     border-radius: var(--border-radius);
     font-size: 16px;
-}
-
-.search-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: var(--border-radius);
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    height: 48px; /* Match input height */
-}
-
-.search-button:hover {
-    background-color: #0056b3;
-}
-
-#results-container {
-    margin-top: 40px;
-}
-
-#results-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Start with 1 column */
-    gap: 20px;
 }
 
 /* Adds media queries for responsiveness */

@@ -11,17 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         // 1. Gets the values from the form inputs
-        const destination = document.getElementById('destination').value;
-        const checkIn = document.getElementById('check-in').value;
-        const checkOut = document.getElementById('check-out').value;
-        const guests = document.getElementById('guests').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+  
 
         // 2. (For now) Log the data to the console to make sure it's working
         console.log('Search criteria:', {
-            destination,
-            checkIn,
-            checkOut,
-            guests
+            username,
+            password,
         });
 
         // 3. This is where we will call our API
@@ -44,10 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // For testing, we can add a fake result:
         resultsContainer.innerHTML = `
-            <article class="hotel-card">
-                <h3>Test Hotel in ${destination}</h3>
-                <p>Check-in: ${checkIn}</p>
-                <p>Guests: ${guests}</p>
+            <article class= "hotel-card" >
+                <h3> Test username ${username}</h3>
+                <h4>Password: ${password}</p>
             </article>
         `;
 

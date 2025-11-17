@@ -118,6 +118,21 @@ test('past date test', () => {
     expect(query).toBe(-1);
 })
 
+test('end date before start test', () => {
+    let query = search({
+        startDate: '2000-01-03',
+        endDate: '2000-01-01',
+        minPrice: 2.0,
+        roomConfig: {
+            single:    1,
+            double:    0,
+            twin:      0,
+            penthouse: 0,
+        }
+    })
+    expect(query).toBe(-1);
+})
+
 test('invalid room test', () => {
     let query = search({
         startDate: '3021-01-01',
