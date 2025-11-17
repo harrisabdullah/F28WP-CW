@@ -12,14 +12,23 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         headers: {
             "Content-Type": "application/json"
         },
+        
         body: JSON.stringify({
             username: username,
             password: password
         })
+
     })
     .then(res => res.json())
     .then(data => {
         console.log(data)
+
+        if (data.userID) {
+            document.cookie = `userID=${data.userID}; path =/; max age=86400`;
+
+            console.log("saved userID into cookie", data.userID)
+        }
+        
     })
     .catch(err => {
         console.log(err)
