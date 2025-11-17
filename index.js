@@ -83,8 +83,8 @@ app.post('/api/login', (req, res) => {
         if(!checkPW) {
             return res.status(401).json({ message: 'Invalid password.' });
     }
-    const token = loginUtil.makeToken(user);
-    return res.status(200).json({ message: 'Login successful.', token, userID: user.ID });
+    
+    return res.status(200).json({ message: 'Login successful.', userID: user.ID });
     })
 })
 
@@ -92,10 +92,10 @@ app.post('/api/signup', (req, res) => {
     const { username, password } = req.body;
 
     if(!username || !password) {
-        return res.status(400).json({ message: 'All fields are required.' });
+        return res.status(400).json({ error: 'All fields are required.' });
     }
 
-    signupUtil.checkUser(db, async (err, user) => {
+    signupUtil.checkUser(db, username, async (err, user) => {
         if(err) {
             console.error(err);
             return res.status(500).json({ error: 'Database error. '});

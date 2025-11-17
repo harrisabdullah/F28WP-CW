@@ -4,8 +4,6 @@ async function checkPass (db, password, dbPassword){
     return password == dbPassword;
 }
 
-function makeToken(user){
-    return jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-}
 
-module.exports = { checkPass, makeToken };
+
+module.exports = { checkPass };
