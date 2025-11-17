@@ -14,21 +14,38 @@
     </header>
 
     <main>
-        <section class = "signup">
-            <form id="signup-form">
 
+        <h2> Sign up </h1>
+
+        <div class = "signup">
+            <form action = "signup-form">
+
+
+                <div class = "input-box" > 
                 <label for = "uname" > Username </label>
                 <input type = "text" id = "uname" placeholder = "Username"> 
-                <label for = "pword" > Password </label>
-                <input type = "text " id = "pword" placeholder = "Password" > 
-                <label for = "pword" > Confirm Password </label>
-                <input type = "text" id = "pword" placeholder = "Password" >
+                </div>
 
-                <a href = "login.html" > 
-                <button type="submit" class="signup-button"> Join :> </button>
-                </a>
-            </form>
-        </section>
+                <div class = "input-box" > 
+                <label for = "pword" > Password (Minimum 8 character requirement) </label>
+                <input type = "password" id = "pword" name = "password" minLength = "8" required placeholder = "Password"  > 
+                </div>
+
+                <div class = "input-box" > 
+                <label for = "confirm" > Confirm Password </label>
+                <input type = "password" id = "confirm" name = "password" minLength = "8" required placeholder = "Password" >
+                </div>
+
+                <div class = "remember"> 
+                <label>
+                    <a href = "login.html" > 
+                    <button type= "submit" class="signup-button"> Join :> </button>
+                    </a>
+                 </label>
+                </div>
+
+                </form>
+     </div>
 
         
     </main>

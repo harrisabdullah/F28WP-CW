@@ -2,11 +2,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // Gets references to the HTML elements we need
-    const signupForm = document.getElementById('signup-form');
+    const signUpForm = document.getElementById('login-form');
    
 
     // Adds an event listener for the form's 'submit' event
-    searchForm.addEventListener('submit', (event) => {
+    signUpForm.addEventListener('submit', (event) => {
         // Prevents the form from doing its default behavior (refreshing the page)
         event.preventDefault();
 
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
     });
+
 
   
 
