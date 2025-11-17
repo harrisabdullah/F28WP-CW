@@ -1,6 +1,6 @@
 /* Using CSS variables for easy-to-change colors */
 :root {
-    --primary-color: #007bff;
+    --primary-color: rgb(21, 157, 185);
     --light-gray: #f4f4f4;
     --dark-gray: #333;
     --border-radius: 8px;
@@ -16,7 +16,7 @@ body {
 }
 
 header {
-    background-color: white;
+    background-color: rgb(21, 157, 185);
     padding: 20px 40px;
     box-shadow: var(--box-shadow);
     text-align: center;
