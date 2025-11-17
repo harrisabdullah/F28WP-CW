@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS Hotels (
     hotelID INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     city TEXT,
-    country TEXT,
     singleRoomPrice REAL,
     twinRoomPrice REAL,
     doubleRoomPrice REAL,

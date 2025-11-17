@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #159db9;
+    --primary-color: rgb(21, 157, 185);
     --light-gray: #f4f4f4;
     --dark-gray: #333;
     --border-radius: 8px;
@@ -32,6 +32,17 @@ main {
     padding: 24px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+}
+
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 20px 36px;
+  background: #ffffff;
+  color: rgb(39, 37, 37);
+  text-decoration: none;
+  border-radius: 6px;
 }
 
 /* This uses Flexbox to arrange the form fields nicely */

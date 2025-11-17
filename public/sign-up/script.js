@@ -2,12 +2,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // Gets references to the HTML elements we need
-    const signUpForm = document.getElementById('login-form');
+    const signUpForm = document.getElementById('signup-form');
+
    
 
     // Adds an event listener for the form's 'submit' event
     signUpForm.addEventListener('submit', (event) => {
-        // Prevents the form from doing its default behavior (refreshing the page)
         event.preventDefault();
 
         // 1. Gets the values from the form inputs
@@ -20,32 +20,34 @@ document.addEventListener('DOMContentLoaded', () => {
             username,
             password,
         });
-
-        // 3. This is where we will call our API
-        // Group members working on the API will advise how to
-        // use 'fetch' to send this data and get results.
-        
-        // Example of what the API call might look like:
-        /*
-        fetch(`https://your-group-api.com/search?dest=${destination}&checkin=${checkIn}&checkout=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the list of hotels from the API
-                displayResults(data);
+        fetch(window.location.origin + "/api/login", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            
+            body: JSON.stringify({
+                username: username,
+                password: password
             })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = '<p>Sorry, something went wrong. Please try again.</p>';
-            });
-        */
+    
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+    
+            if (data.userID) {
+                document.cookie = `userID=${data.userID}; path =/; max age=86400`;
+    
+                console.log("saved userID into cookie", data.userID)
+            }
+            
+        })
+        .catch(err => {
+            console.log(err)
+        })
+      
         
-        // For testing, we can add a fake result:
-        resultsContainer.innerHTML = `
-            <article class= "hotel-card" >
-                <h3> Test username ${username}</h3>
-                <h4>Password: ${password}</p>
-            </article>
-        `;
 
     });
 

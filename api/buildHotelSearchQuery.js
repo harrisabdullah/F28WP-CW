@@ -18,11 +18,12 @@ function isValidDateInFuture(str) {
 }
 
 const querySchema = {
-    'name':        val => typeof val === 'string',
-    'minPrice':   val => typeof val === 'number' && val >= 0.0,
-    'maxPrice':   val => typeof val === 'number' && val >= 0.0,
-    'startDate':  val => typeof val === 'string' && isValidDateInFuture(val),
-    'endDate':    val => typeof val === 'string' && isValidDateInFuture(val),
+    'name': val => typeof val === 'string',
+    'minPrice': val => typeof val === 'number' && val >= 0.0,
+    'maxPrice': val => typeof val === 'number' && val >= 0.0,
+    'city': val => typeof val === 'string',
+    'startDate': val => typeof val === 'string' && isValidDateInFuture(val),
+    'endDate': val => typeof val === 'string' && isValidDateInFuture(val),
     'roomConfig': val => typeof val === 'object'
 }
 
@@ -116,6 +117,10 @@ function buildHotelSearchQuery(query) {
             conditions.push(price + " < ?");
             params.push(...price_conds);
             params.push(query.maxPrice);
+        }
+        if (query.location){
+            conditions.push("city = ?");
+            params.push(query.city);
         }
     }
     let sql = "SELECT * FROM hotels";
