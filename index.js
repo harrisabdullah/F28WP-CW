@@ -84,7 +84,7 @@ app.post('/api/login', (req, res) => {
             return res.status(401).json({ message: 'Invalid password.' });
     }
     
-    return res.status(200).json({ message: 'Login successful.', userID: user.ID });
+    return res.status(200).json({ message: 'Login successful.', userID: user.userID });
     })
 })
 
@@ -111,7 +111,8 @@ app.post('/api/signup', (req, res) => {
                 console.error(err);
                 return res.status(500).json({ message: 'Database error. '})
                 }  
+            return res.status(201).json({ message: 'User registered successfully.' , userID: this.lastID});
         })
-        return res.status(201).json({ message: 'User registered successfully.' , userID: this.lastID});
+        
     })
 })
