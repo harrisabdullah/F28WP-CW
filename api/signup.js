@@ -1,6 +1,3 @@
-const jwt = require('jsonwebtoken');
-
-
 function checkUser(db, username, callback){
     const query = 'SELECT * FROM Users WHERE username = ?'
     db.get(query, [username], callback);
