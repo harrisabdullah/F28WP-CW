@@ -34,6 +34,17 @@ main {
     box-shadow: var(--box-shadow);
 }
 
+.sign-up-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 20px 36px;
+  background: #ffffff;
+  color: rgb(39, 37, 37);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
 .back-btn {
   position: fixed;
   top: 20px;
