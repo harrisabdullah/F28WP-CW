@@ -3,8 +3,9 @@ const path = require('path')
 const app = express()
 const port = 3000
 
-const { dbinit } = require('./dbUtils')
+const { dbinit, rowExists } = require('./dbUtils')
 const buildHotelSearchQuery = require('./api/buildHotelSearchQuery')
+const buildMakeBookingQuery = require('./api/buildMakeBookingQuery')
 
 db = dbinit();
 
@@ -54,6 +55,31 @@ app.post('/api/search', (req, res) => {
         res.json(rows);
     })
 })
+
+app.post('/api/make_booking', async (req, res) => {
+    const query = buildMakeBookingQuery(req.body);
+    if (query == -1){
+        res.status(400).json({ error: 'Invalid request' });
+        return;
+    }
+    if (!(await rowExists(db, 'Users', 'userID', req.body.userID))){
+        res.status(400).json({ error: 'User not found' });
+        return;
+    }
+    if (!(await rowExists(db, 'Hotels', 'hotelID', req.body.hotelID))){
+        res.status(400).json({ error: 'Hotel not found' });
+        return;
+    }
+
+    db.run(query[0], query[1], function(err) {
+        if (err){
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            return;
+        }
+        res.json({ bookingID: this.lastID });
+    });
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)
