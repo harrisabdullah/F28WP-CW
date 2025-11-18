@@ -38,10 +38,7 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
             document.cookie = `userID=${data.userID}; path=/; max-age=86400`; // 86400 seconds = 1 day
             console.log("Saved userID to cookie:", data.userID);
 
-<<<<<<< HEAD
-=======
             window.location.href = window.location.origin;   
->>>>>>> main
         } else {
             passwordError.textContent = "Invalid username or password.";
         }
