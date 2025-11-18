@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+document.addEventListener('DOMContentLoaded', () => {
+    const errorMessage = document.getElementById('error-message');
+
+    // Get dynamic message from URL query param (e.g., ?msg=Error%20message)
+    const urlParams = new URLSearchParams(window.location.search);
+    const msg = urlParams.get('msg');
+
+    if (msg) {
+        errorMessage.textContent = decodeURIComponent(msg);
+    }
+});
+=======
 /// Waits for the entire HTML document to be loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -80,3 +93,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+>>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
