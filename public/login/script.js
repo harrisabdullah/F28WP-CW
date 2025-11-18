@@ -48,6 +48,6 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
     .catch(err => {
         // Display errors to the user
         console.error(err);
-        alert(err.message); // Simple way to show the error to the user
+        passwordError.textContent = "Invalid username or password.";
     });
 });
