@@ -227,7 +227,7 @@ app.post('/api/login', (req, res) => {
     }
     const checkPW = loginUtil.checkPass(db, password, user.password);
         if(!checkPW) {
-            return res.status(401).json({ message: 'Invalid password.' });
+            return res.status(401).json({ error: 'Invalid password.' });
     }
     
     return res.status(200).json({ message: 'Login successful.', userID: user.userID });
