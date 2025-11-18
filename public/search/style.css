@@ -61,6 +61,17 @@ main {
   border-radius: 6px;
 }
 
+.logout-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 20px 36px;
+  background: #ffffff;
+  color: rgb(39, 37, 37);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
 /* This uses Flexbox to arrange the form fields nicely */
 #search-form {
     display: flex;

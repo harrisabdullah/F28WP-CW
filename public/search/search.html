@@ -11,8 +11,10 @@
 
     <header>
         <h1>Find Your Next Stay</h1>
-        <a href="/login" class="login-btn">Login</a>
-        <a href="/sign-up" class="sign-up-btn">Sign Up</a>
+        <span id="welcome-message"></span>
+        <a href="/login" class="login-btn" id="login-btn">Login</a>
+        <a href="/sign-up" class="sign-up-btn" id="sign-up-btn">Sign Up</a>
+        <a href="#" class="logout-btn" id="logout-btn">Logout</a>
     </header>
 
     <main>
@@ -34,6 +36,7 @@
                     <label for="guests">Guests</label>
                     <input type="number" id="guests" name="guests" min="1" value="1" required>
                 </div>
+                
                 <button type="submit" class="search-button">Search</button>
             </form>
         </section>
