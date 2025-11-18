@@ -17,31 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Function to fetch and display bookings with timeout
-    async function fetchBookings() {
-
-        try {
-            const response = await fetch(window.location.origin + "/api/getBookings", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userID: parseInt(userID)
-                })
-            });
-            if (!response.ok){
-                console.log(userID);
-                throw new Error('Failed to fetch bookings');
-            }
-            const bookings = await response.json();
-            displayBookings(bookings);
-        } catch (error) {
-            console.error('Error fetching bookings:', error);
-            window.location.href = '/error?msg=Failed%20to%20load%20bookings.%20Please%20try%20again.';
-        }
-    }
-
-    // Function to display bookings
-    function displayBookings(bookings) {
+function displayBookings(bookings) {
         bookingsGrid.innerHTML = ''; // Clear previous content
 
         if (bookings.length === 0) {
@@ -49,20 +25,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        console.log('Bookings fetched:', bookings);
         bookings.forEach(booking => {
             const bookingCard = document.createElement('div');
             bookingCard.className = 'booking-card';
-
             bookingCard.innerHTML = `
-                <img src="${booking.image}" alt="${booking.name}">
-                <h3>${booking.name}</h3>
-                <p>Dates: ${booking.startDate} to ${booking.endDate}</p>
-                <p>Rooms: Single: ${booking.singleCount}, Double: ${booking.doubleCount}, Twin: ${booking.twinCount}, Penthouse: ${booking.penthouseCount}</p>
-                <p>Price: £${booking.price}</p>
-                <p>Contact: fakehotel@email.com (fake for demo)</p>
-                <button class="cancel-button" data-booking-id="${booking.bookingID}">Cancel Booking</button>
-            `;
+            <h3>Booking #${booking.bookingID}</h3>
+            <p><strong>Hotel ID:</strong> ${booking.hotelID}</p>
+            <p><strong>Start Date:</strong> ${booking.startDate}</p>
+            <p><strong>End Date:</strong> ${booking.endDate}</p>
+            <p><strong>Rooms:</strong></p>
+            <ul>
+                <li>Single: ${booking.single}</li>
+                <li>Double: ${booking.double}</li>
+                <li>Twin: ${booking.twin}</li>
+                <li>Penthouse: ${booking.penthouse}</li>
+            </ul>
+            <p><strong>Total Price:</strong> $${booking.price}</p>
+        `;
 
             bookingsGrid.appendChild(bookingCard);
         });
@@ -76,13 +55,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Function to cancel a booking
+
+    // Function to fetch and display bookings with timeout
+    async function fetchBookings() {
+        try {
+            const response = await fetch('/api/getBookings', {
+                method: 'POST', // Changed to POST to support body
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userID: parseInt(userID)
+                })
+            });
+            if (!response.ok){
+                throw new Error('Failed to fetch bookings');
+            }
+            const bookings = await response.json();
+
+            displayBookings(bookings);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+            window.location.href = '/error?msg=Failed%20to%20load%20bookings.%20Please%20try%20again.';
+        }
+    }
+
+    
+    // Function to cancel a booking (now includes userID for authentication)
     async function cancelBooking(bookingID) {
         try {
-            const response = await fetch('api/cancelBooking', {
+            const response = await fetch('http://localhost:3000/cancel-booking', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ bookingID: parseInt(bookingID) })
+                body: JSON.stringify({
+                    bookingID: parseInt(bookingID),
+                    userID: parseInt(userID) // Added for authentication
+                })
             });
             if (!response.ok) throw new Error('Failed to cancel booking');
             const result = await response.json();
@@ -95,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error cancelling booking:', error);
-            window.location.href = '/error?msg=Failed%20to%20cancel%20booking.%20Please%20try%20again.';
+            window.location.href = '/error?msg=Failed%20to%20cancel%20booking.%20Please%20verify%20your%20details%20and%20try%20again.';
         }
     }
 
