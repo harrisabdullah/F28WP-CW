@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     userID: parseInt(userID)
                 })
             });
-            if (!response.ok) throw new Error('Failed to fetch bookings');
+            if (!response.ok){
+                console.log(userID);
+                throw new Error('Failed to fetch bookings');
+            }
             const bookings = await response.json();
             displayBookings(bookings);
         } catch (error) {
