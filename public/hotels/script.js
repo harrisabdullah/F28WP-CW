@@ -64,7 +64,6 @@ function updateHTML(hotel, query, price) {
     document.getElementById('hotel-name').textContent = hotel.name;
     document.getElementById('hotel-location').textContent = `${hotel.city}, ${hotel.country}`;
     document.getElementById('hotel-stars').textContent = `${hotel.starRating} stars`;
-    document.getElementById('hotel-image').src = hotel.image;
 
     document.getElementById('booking-start').textContent = `Start: ${query.startDate}`;
     document.getElementById('booking-end').textContent = `End: ${query.endDate}`;
