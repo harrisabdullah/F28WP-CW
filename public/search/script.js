@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeMessage = document.getElementById('welcome-message');
     const loginBtn = document.getElementById('login-btn');
     const signUpBtn = document.getElementById('sign-up-btn');
-    const logoutBtn = document.getElementById('logout-btn'); // Get the new button
+    const logoutBtn = document.getElementById('logout-btn');
     const addRoomBtn = document.getElementById("addRoomBtn");
     if (addRoomBtn) {
         addRoomBtn.addEventListener("click", addRoomType);
@@ -120,6 +120,8 @@ function clearCookie(name, path = '/', domain = '') {
         const destination = document.getElementById('destination').value;
         const checkIn = document.getElementById('check-in').value;
         const checkOut = document.getElementById('check-out').value;
+        const maxPrice = document.getElementById('max-price').value;
+        const minPrice = document.getElementById('min-price').value;
         const roomConfig = {
             single: Number(document.querySelector('#room-single input')?.value) || 0,
             double: Number(document.querySelector('#room-double input')?.value) || 0,
@@ -130,8 +132,8 @@ function clearCookie(name, path = '/', domain = '') {
 
         const requestBody = {
             name: "", 
-            minPrice: 0,
-            maxPrice: 9999,
+            minPrice: Number(minPrice),
+            maxPrice: Number(maxPrice),
             startDate: checkIn,
             endDate: checkOut,
             city: destination,
@@ -157,6 +159,8 @@ function clearCookie(name, path = '/', domain = '') {
 
         sessionStorage.setItem('startDate', checkIn);
         sessionStorage.setItem('endDate', checkOut);
+        sessionStorage.setItem('maxPrice', maxPrice);
+        sessionStorage.setItem('minPrice', minPrice);
 
 
         sessionStorage.setItem('single', roomConfig.single);
