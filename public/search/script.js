@@ -190,7 +190,6 @@ function clearCookie(name, path = '/', domain = '') {
             hotelCard.innerHTML = `
                 <img src="${hotel.image}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
-                <p>${hotel.description}</p>         
                 <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
             
             resultsContainer.appendChild(hotelCard);
