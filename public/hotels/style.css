@@ -88,3 +88,27 @@ ul div {
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
+#book-button {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #e67e22;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#book-button:hover {
+    background-color: #d35400;
+    transform: scale(1.05);
+}
+
+#book-button:active {
+    background-color: #c0392b;
+    transform: scale(0.98);
+}
