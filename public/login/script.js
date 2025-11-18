@@ -38,11 +38,6 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
             document.cookie = `userID=${data.userID}; path=/; max-age=86400`; // 86400 seconds = 1 day
             console.log("Saved userID to cookie:", data.userID);
 
-            // *** THIS IS THE CRUCIAL FIX ***
-            // Redirect the user to the booking management page.
-            // Replace '/bookings.html' with the actual path to your booking page.
-            window.location.href = '/bookings.html';
-
         } else {
             // Handle cases where the API gives a 200 OK but no userID
             throw new Error('Login response did not include a userID.');
