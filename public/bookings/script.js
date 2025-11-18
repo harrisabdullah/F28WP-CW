@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-function displayBookings(bookings) {
+function displayBookings(bookings, userID) {
         bookingsGrid.innerHTML = ''; // Clear previous content
 
         if (bookings.length === 0) {
@@ -27,6 +27,7 @@ function displayBookings(bookings) {
 
         bookings.forEach(booking => {
             const bookingCard = document.createElement('div');
+            bookingCard.id = `booking-${booking.bookingID}`;
             bookingCard.className = 'booking-card';
             bookingCard.innerHTML = `
             <h3>Booking #${booking.bookingID}</h3>
@@ -41,18 +42,22 @@ function displayBookings(bookings) {
                 <li>Penthouse: ${booking.penthouse}</li>
             </ul>
             <p><strong>Total Price:</strong> $${booking.price}</p>
+            <button id="${booking.bookingID}-cancel">cancel</button>
         `;
-
             bookingsGrid.appendChild(bookingCard);
+            document.getElementById(`${booking.bookingID}-cancel`).addEventListener('click', () => {
+            fetch('/api/cancelBooking', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userID: Number(userID),
+                    bookingID: booking.bookingID
+                })
+            }).then(_ => {
+                document.getElementById(`booking-${booking.bookingID}`).remove();
+            })
         });
-
-        // Add event listeners for cancel buttons
-        document.querySelectorAll('.cancel-button').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const bookingID = event.target.getAttribute('data-booking-id');
-                await cancelBooking(bookingID);
-            });
-        });
+    })
     }
 
 
@@ -71,37 +76,10 @@ function displayBookings(bookings) {
             }
             const bookings = await response.json();
 
-            displayBookings(bookings);
+            displayBookings(bookings, userID);
         } catch (error) {
             console.error('Error fetching bookings:', error);
             window.location.href = '/error?msg=Failed%20to%20load%20bookings.%20Please%20try%20again.';
-        }
-    }
-
-    
-    // Function to cancel a booking (now includes userID for authentication)
-    async function cancelBooking(bookingID) {
-        try {
-            const response = await fetch('http://localhost:3000/cancel-booking', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    bookingID: parseInt(bookingID),
-                    userID: parseInt(userID) // Added for authentication
-                })
-            });
-            if (!response.ok) throw new Error('Failed to cancel booking');
-            const result = await response.json();
-
-            if (result.success) {
-                alert('Booking cancelled successfully!');
-                fetchBookings(); // Refresh the list
-            } else {
-                throw new Error('Cancellation failed');
-            }
-        } catch (error) {
-            console.error('Error cancelling booking:', error);
-            window.location.href = '/error?msg=Failed%20to%20cancel%20booking.%20Please%20verify%20your%20details%20and%20try%20again.';
         }
     }
 
