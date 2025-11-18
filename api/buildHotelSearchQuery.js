@@ -27,12 +27,6 @@ const querySchema = {
     'roomConfig': val => typeof val === 'object'
 }
 
-/**
- * Validates a hotel search query object.
- *
- * @param {Object} queryObj - JavaScript object containing search criteria.
- * @returns {boolean} Returns true if the query object is valid, false if it is invalid.
- */
 function isValidQuery(q) {
     if (!testSchema(querySchema, q, false)){
         return false;
@@ -118,7 +112,7 @@ function buildHotelSearchQuery(query) {
             params.push(...price_conds);
             params.push(query.maxPrice);
         }
-        if (query.location){
+        if (query.city){
             conditions.push("city = ?");
             params.push(query.city);
         }
