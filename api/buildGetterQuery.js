@@ -1,9 +1,5 @@
 const { testSchema, _ } = require('./schema');
 
-const getterSchema = {
-    'userID': val => Number.isInteger(val)
-}
-
 /**
  * Generates a SQL query and its parameters for retrieving rows from a specified table
  * where a given field matches the provided user ID.
@@ -20,12 +16,9 @@ const getterSchema = {
  *   - parametersArray: array of values to substitute in the query
  * Returns -1 if the input validation fails.
  */
-function buildGetterQuery(body, table, field){
-    if (!testSchema(getterSchema, body, true)){
-        return -1;
-    }
+function buildGetterQuery(value, table, field){
     const sql = `SELECT * FROM ${table} WHERE ${field} = ?`
-    return [sql, [body.userID]]
+    return [sql, [value]]
 }
 
 module.exports = buildGetterQuery
