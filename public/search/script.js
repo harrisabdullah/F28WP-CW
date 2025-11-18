@@ -1,7 +1,81 @@
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const searchForm = document.getElementById('search-form');
     const resultsContainer = document.getElementById('results-grid');
+    const welcomeMessage = document.getElementById('welcome-message');
+    const loginBtn = document.getElementById('login-btn');
+    const signUpBtn = document.getElementById('sign-up-btn');
+    const logoutBtn = document.getElementById('logout-btn'); // Get the new button
+    
+    function getCookie(name) {
+        return document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="))
+        ?.split("=")[1];
+    }
+
+    
+function clearCookie(name, path = '/', domain = '') {
+    if (document.cookie.indexOf (name + "=") === -1) {
+        console.log(`Cookie '$(name)' not found.`);
+        return;
+    }
+
+      let expiry = new Date(0).toUTCString(); 
+
+            // Construct the deletion string
+            let cookieString = name + '=; expires=' + expiry;
+
+            // Append optional path (required to match original cookie setting)
+            if (path) {
+                cookieString += '; path=' + path;
+            }
+
+            // Append optional domain (required to match original cookie setting)
+            if (domain) {
+                cookieString += '; domain=' + domain;
+            }
+
+            // Set the cookie, which triggers deletion
+            document.cookie = cookieString;
+            updateCookieDisplay(); // Refresh UI
+
+            console.log(`Cookie '${name}' cleared using: ${cookieString}`);
+            document.getElementById('setMsg').textContent = `Cookie cleared: ${name}`;
+
+}
+    function checkLoginStatus() {
+        const username = getCookie('username'); // Assumes 'username' cookie is set upon login
+        
+        if (username) {
+            welcomeMessage.textContent = `Welcome, ${decodeURIComponent(username)}!`;
+            document.getElementById("login-btn").style.display = 'none';
+            document.getElementById("sign-up-btn").style.display = 'none';
+             document.getElementById("logout-btn").style.display = 'inline-block';
+        } else {
+            welcomeMessage.textContent = '';
+            document.getElementById("login-btn").style.display = '';
+            document.getElementById("sign-up-btn").style.display = '';
+            document.getElementById("logout-btn").style.display = 'none';
+        }
+    }
+
+
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Clear both cookies
+        clearCookie('userID');
+        clearCookie('username');
+        
+        // Update UI and redirect (or simply reload the page)
+        location.reload(); 
+
+
+    });
+
+    checkLoginStatus();
 
     searchForm.addEventListener('submit', async (event) => {
 
