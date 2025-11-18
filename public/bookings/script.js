@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchBookings() {
 
         try {
-            const response = await fetch(window.location.origin + "/api/getBookings", {
+            const response = await fetch(window.location.origin + "http://localhost:3000/bookings/", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -50,21 +50,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         console.log('Bookings fetched:', bookings);
+        
         bookings.forEach(booking => {
             const bookingCard = document.createElement('div');
             bookingCard.className = 'booking-card';
 
-            bookingCard.innerHTML = `
-                <img src="${booking.image}" alt="${booking.name}">
-                <h3>${booking.name}</h3>
-                <p>Dates: ${booking.startDate} to ${booking.endDate}</p>
-                <p>Rooms: Single: ${booking.singleCount}, Double: ${booking.doubleCount}, Twin: ${booking.twinCount}, Penthouse: ${booking.penthouseCount}</p>
-                <p>Price: £${booking.price}</p>
-                <p>Contact: fakehotel@email.com (fake for demo)</p>
-                <button class="cancel-button" data-booking-id="${booking.bookingID}">Cancel Booking</button>
-            `;
+            // Assuming `bookings` is the array fetched from the backend
+bookings.forEach(booking => {
+    const bookingCard = document.createElement('div');
+    bookingCard.classList.add('booking-card');
 
-            bookingsGrid.appendChild(bookingCard);
+    // Parse and map raw data to expected keys
+    const parsedBooking = {
+        image: 'images/hotel-default.jpg', // Replace with actual image logic if available
+        name: `Hotel ${booking.hotelID}`,  // You can customize this further
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        singleCount: booking.single,
+        doubleCount: booking.double,
+        twinCount: booking.twin,
+        penthouseCount: booking.penthouse,
+        price: booking.price,
+        bookingID: booking.bookingID
+    };
+
+    // Inject parsed data into HTML
+    bookingCard.innerHTML = `
+        <img src="${parsedBooking.image}" alt="${parsedBooking.name}">
+        <h3>${parsedBooking.name}</h3>
+        <p>Dates: ${parsedBooking.startDate} to ${parsedBooking.endDate}</p>
+        <p>Rooms: Single: ${parsedBooking.singleCount}, Double: ${parsedBooking.doubleCount}, Twin: ${parsedBooking.twinCount}, Penthouse: ${parsedBooking.penthouseCount}</p>
+        <p>Price: £${parsedBooking.price}</p>
+        <p>Contact: fakehotel@email.com (fake for demo)</p>
+        <button class="cancel-button" data-booking-id="${parsedBooking.bookingID}">Cancel Booking</button>
+    `;
+
+    document.querySelector('#bookings-container').appendChild(bookingCard);
+});
         });
 
         // Add event listeners for cancel buttons
@@ -76,13 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Function to cancel a booking
+ 
+    // Function to cancel a booking (now includes userID for authentication)
     async function cancelBooking(bookingID) {
         try {
-            const response = await fetch('api/cancelBooking', {
+            const response = await fetch('http://localhost:3000/booking/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ bookingID: parseInt(bookingID) })
+                body: JSON.stringify({
+                    bookingID: parseInt(bookingID),
+                    userID: parseInt(userID) // Added for authentication
+                })
             });
             if (!response.ok) throw new Error('Failed to cancel booking');
             const result = await response.json();
@@ -95,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Error cancelling booking:', error);
-            window.location.href = '/error?msg=Failed%20to%20cancel%20booking.%20Please%20try%20again.';
+            window.location.href = '/error?msg=Failed%20to%20cancel%20booking.%20Please%20verify%20your%20details%20and%20try%20again.';
         }
     }
 
