@@ -208,8 +208,8 @@ function clearCookie(name, path = '/', domain = '') {
                 <img src="${hotel.image}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
                 <p>${hotel.description}</p>   
-                <p>${price}</p>      
-                <a href = "/hotels/$${hotel.hotelID}"> Book Now </a>`;
+                <p>£${price}</p>      
+                <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
             
             resultsContainer.appendChild(hotelCard);
         });
