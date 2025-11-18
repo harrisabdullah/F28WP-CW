@@ -3,13 +3,14 @@ const path = require('path')
 const app = express()
 const port = 3000
 
-const { dbinit, rowExists } = require('./dbUtils')
+const { dbinit, rowExists, getPrice } = require('./dbUtils')
 const buildHotelSearchQuery = require('./api/buildHotelSearchQuery')
 const loginUtil = require('./api/login')
 const signupUtil = require('./api/signup')
 const buildMakeBookingQuery = require('./api/buildMakeBookingQuery')
 const buildCancelBookingQuery = require('./api/buildCancelBookingQuery')
 const buildGetterQuery = require('./api/buildGetterQuery')
+const daysBetween = require('./api/daysBetween')
 
 db = dbinit();
 
@@ -119,21 +120,68 @@ app.post('/api/cancelBooking', async (req, res) => {
     })
 })
 
-app.post('/api/getBookings', (req, res) => {
+const dbAll = (sql, params) => {
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
+
+app.post('/api/getBookings', async (req, res) => {
     const query = buildGetterQuery(req.body, 'Bookings', 'user');
-    if (query == -1){
+    if (query == -1) {
         res.status(400).json({ error: 'Invalid request' });
         return;
     }
-    db.all(query[0], query[1], (err, rows) => {
-        if (err){
-            console.error('Database error:', err.message);
-            res.status(500).json({ error: 'Database error' });
+
+    if (!(await rowExists(db, 'Users', 'userID', req.body.userID))) {
+        res.status(400).json({ error: 'User not found' });
+        return;
+    }
+
+    try {
+        const rows = await dbAll(query[0], query[1]);
+        
+        if (!rows || rows.length === 0) {
+            res.json([]);
             return;
         }
-        res.json(rows);
-    })
-})
+
+        const pricePromises = rows.map(element => {
+            const duration = daysBetween(element.startDate, element.endDate);
+            const pricePromise = getPrice(db, element.hotel, 
+                                             element.singleCount, 
+                                             element.doubleCount, 
+                                             element.twinCount, 
+                                             element.penthouseCount, 
+                                             duration);
+            
+            return pricePromise.then(price => ({
+                hotelID: element.hotelID,
+                single: element.singleCount,
+                double: element.doubleCount,
+                twin: element.twinCount,
+                penthouse: element.penthouseCount,
+                startDate: element.startDate,
+                endDate: element.endDate,
+                price: price
+            }));
+        });
+
+        const output = await Promise.all(pricePromises);
+
+        res.json(output);
+
+    } catch (err) {
+        console.error('Database or Price Calculation error:', err.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 app.post('/api/getHotel', (req, res) => {
     const query = buildGetterQuery(req.body, 'Hotels', 'hotelID');

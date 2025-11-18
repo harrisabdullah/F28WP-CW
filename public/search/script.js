@@ -1,82 +1,76 @@
-/// Waits for the entire HTML document to be loaded before running the script
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Gets references to the HTML elements we need
     const searchForm = document.getElementById('search-form');
     const resultsContainer = document.getElementById('results-grid');
 
-    // Adds an event listener for the form's 'submit' event
-    searchForm.addEventListener('submit', (event) => {
-        // Prevents the form from doing its default behavior (refreshing the page)
+    searchForm.addEventListener('submit', async (event) => {
+
         event.preventDefault();
 
-        // 1. Gets the values from the form inputs
         const destination = document.getElementById('destination').value;
         const checkIn = document.getElementById('check-in').value;
         const checkOut = document.getElementById('check-out').value;
-        const guests = document.getElementById('guests').value;
+        const guests = Number(document.getElementById('guests').value);
 
-        // 2. (For now) Log the data to the console to make sure it's working
-        console.log('Search criteria:', {
-            destination,
-            checkIn,
-            checkOut,
-            guests
-        });
+        const roomConfig = {
+            single: guests, 
+            double: 0,
+            twin: 0,
+            penthouse: 0
+        };
 
-        // 3. This is where we will call our API
-        // Group members working on the API will advise how to
-        // use 'fetch' to send this data and get results.
+        const requestBody = {
+            name: "", 
+            minPrice: 0,
+            maxPrice: 9999,
+            startDate: checkIn,
+            endDate: checkOut,
+            city: destination,
+            roomConfig: roomConfig
+        };
         
-        // Example of what the API call might look like:
-        /*
-        fetch(`https://your-group-api.com/search?dest=${destination}&checkin=${checkIn}&checkout=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the list of hotels from the API
-                displayResults(data);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = '<p>Sorry, something went wrong. Please try again.</p>';
+        try {
+            const response = await fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
             });
-        */
-        
-        // For testing, we can add a fake result:
-        resultsContainer.innerHTML = `
-            <article class="hotel-card">
-                <h3>Test Hotel in ${destination}</h3>
-                <p>Check-in: ${checkIn}</p>
-                <p>Guests: ${guests}</p>
-            </article>
-        `;
 
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}`);
+        }
+
+        const hotels = await response.json();
+        console.log("Received:", hotels);
+
+        displayResults(hotels);
+
+        } catch (error) {
+            console.error("API Error:", error);
+            resultsContainer.innerHTML = `<p class="error">Something went wrong while searching.</p>`;
+        }
     });
 
-    // 4. A function to display the results (we'll use this with our API)
     function displayResults(hotels) {
-        // Clears any previous results
         resultsContainer.innerHTML = '';
 
-        if (hotels.length === 0) {
+        if (!hotels || hotels.length === 0) {
             resultsContainer.innerHTML = '<p>No hotels found matching your criteria.</p>';
             return;
         }
 
-        // Loops through each hotel in the results and creates an HTML card for it
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
-            hotelCard.className = 'hotel-card'; // Adds a class for styling
+            hotelCard.className = 'hotel-card';
             
             hotelCard.innerHTML = `
-                <img src="${hotel.imageUrl}" alt="${hotel.name}">
+                <img src="${hotel.image}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
-                <p>${hotel.location}</p>
-                <p><strong>£${hotel.pricePerNight}</strong> / night</p>
-            `;
+                <p>${hotel.description}</p>            `;
             
             resultsContainer.appendChild(hotelCard);
         });
     }
-
 });
