@@ -138,11 +138,14 @@ function clearCookie(name, path = '/', domain = '') {
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
             hotelCard.className = 'hotel-card';
+
+            
             
             hotelCard.innerHTML = `
                 <img src="${hotel.image}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
-                <p>${hotel.description}</p>            `;
+                <p>${hotel.description}</p>         
+                <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
             
             resultsContainer.appendChild(hotelCard);
         });
