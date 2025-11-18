@@ -163,6 +163,7 @@ app.post('/api/getBookings', async (req, res) => {
             
             return pricePromise.then(price => ({
                 hotelID: element.hotelID,
+                bookingID: element.bookingID,
                 single: element.singleCount,
                 double: element.doubleCount,
                 twin: element.twinCount,
