@@ -38,9 +38,12 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
             document.cookie = `userID=${data.userID}; path=/; max-age=86400`; // 86400 seconds = 1 day
             console.log("Saved userID to cookie:", data.userID);
 
+<<<<<<< HEAD
+=======
+            window.location.href = window.location.origin;   
+>>>>>>> main
         } else {
-            // Handle cases where the API gives a 200 OK but no userID
-            throw new Error('Login response did not include a userID.');
+            passwordError.textContent = "Invalid username or password.";
         }
     })
     .catch(err => {
