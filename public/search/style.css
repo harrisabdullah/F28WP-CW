@@ -1,290 +1,103 @@
-/* ===========================
-   GLOBAL
-   =========================== */
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background: #f5f7fa;
-    color: #333;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-/* ===========================
-   HEADER
-   =========================== */
+/* Header */
 header {
-    background: #3b4cca;
-    color: white;
-    padding: 20px;
-<<<<<<< Updated upstream
-}
-
-.search-container {
-    background-color: white;
-    padding: 24px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-}
-
-.login-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 20px 36px;
-  background: #ffffff;
-  color: rgb(39, 37, 37);
-  text-decoration: none;
-  border-radius: 6px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    padding: 15px 20px;
+    background: #222;
 }
 
 .back-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  padding: 20px 36px;
-  background: #ffffff;
-  color: rgb(39, 37, 37);
-  text-decoration: none;
-  border-radius: 6px;
-}
-
-.sign-up-btn {
-  position: fixed;
-  top: 20px;
-  right: 160px;
-  padding: 20px 36px;
-  background: #ffffff;
-  color: rgb(39, 37, 37);
-  text-decoration: none;
-  border-radius: 6px;
-}
-
-.logout-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 20px 36px;
-  background: #ffffff;
-  color: rgb(39, 37, 37);
-  text-decoration: none;
-  border-radius: 6px;
-}
-
-/* This uses Flexbox to arrange the form fields nicely */
-#search-form {
-=======
->>>>>>> Stashed changes
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 28px;
-    flex-grow: 1;
-}
-
-header a {
     color: white;
     text-decoration: none;
-    padding: 8px 15px;
+    padding: 8px 14px;
+    background: #444;
     border-radius: 6px;
-    font-size: 14px;
+    transition: 0.2s;
+}
+.back-btn:hover {
+    background: #666;
 }
 
-.back-btn { background: #6a7fff; }
-.login-btn { background: #4caf50; }
-.sign-up-btn { background: #2e9afe; }
-.logout-btn { background: #e74c3c; }
-
-/* ===========================
-   SEARCH FORM
-   =========================== */
-.search-container {
-    background: white;
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-}
-
-#search-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 6px;
-    font-weight: bold;
-}
-
-input,
-select {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-#addRoomBtn {
-    margin-top: 8px;
-    padding: 8px;
-    background: #3b4cca;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-#addRoomBtn:hover {
-    background: #2f3ca5;
-}
-
-#selectedRooms {
-    grid-column: 1 / -1;
-    padding: 10px;
-    background: #eef1ff;
-    border-radius: 6px;
-    min-height: 30px;
-}
-
-/* ===========================
-   SELECTED ROOMS (JS ADDED)
-   =========================== */
-.room-entry {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #f0f2ff;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #d7dcff;
-    margin-bottom: 8px;
-    width: fit-content;
-}
-
-.room-entry label {
-    font-weight: bold;
-}
-
-.room-entry input {
-    width: 70px;
-    padding: 6px;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-}
-
-.room-entry button {
-    background: #e74c3c;
-    color: white;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.room-entry button:hover {
-    background: #c0392b;
-}
-
-/* ===========================
-   SEARCH BUTTON
-   =========================== */
-.search-button {
-    grid-column: 1 / -1;
-    padding: 12px;
-    font-size: 16px;
-    background: #3b4cca;
-    border: none;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.search-button:hover {
-    background: #2f3ca5;
-}
-
-/* ===========================
-   RESULTS SECTION
-   =========================== */
-#results-container {
-    max-width: 1100px;
-    margin: 20px auto;
-}
-
-#results-container h2 {
-    margin: 10px 0 20px;
-}
-
-#results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-/* ===========================
-   HOTEL CARDS (JS ADDED)
-   =========================== */
-.hotel-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.hotel-card h3 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.hotel-card p {
-    margin: 0;
-    line-height: 1.4;
-}
-
-.hotel-card a {
-    margin-top: auto;
-    display: inline-block;
-    padding: 10px 15px;
-    background: #3b4cca;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-.hotel-card a:hover {
-    background: #2f3ca5;
-}
-
-/* ===========================
-   MESSAGES (JS)
-   =========================== */
-.error {
-    color: #c0392b;
-    background: #ffe6e6;
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-#results-grid p {
-    grid-column: 1 / -1;
+/* Hotel section */
+.hotel-heading {
     text-align: center;
+    padding: 20px;
+    background: white;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+#hotel-image {
+    margin-top: 15px;
+    width: 300px;
+    border-radius: 10px;
+}
+
+/* Dates */
+.dates {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+
+.dates div {
+    background: white;
     padding: 15px;
-    background: #f3f3f3;
-    border-radius: 6px;
+    border-radius: 8px;
+    width: 30%;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Rooms list */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px;
+}
+
+ul div {
+    background: white;
+    margin-bottom: 12px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Total price */
+#total-price {
+    text-align: center;
+    font-size: 1.4rem;
+    margin: 20px auto;
+    padding: 15px;
+    background: white;
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Book button */
+#book-button {
+    display: block;
+    margin: 30px auto;
+    padding: 12px 30px;
+    background: #0a7cff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#book-button:hover {
+    background: #005fcc;
 }
