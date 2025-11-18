@@ -40,8 +40,8 @@ app.get('/error', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'error', 'error.html'))
 })
 
-app.get('/hotels/:hotelId', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'hotel-template', 'hotel-template.html'))
+app.get(/^\/hotels\/(\d+)/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'hotels', 'hotel-template.html'))
 })
 
 // APIs
@@ -185,7 +185,7 @@ app.post('/api/getBookings', async (req, res) => {
 });
 
 app.post('/api/getHotel', (req, res) => {
-    const query = buildGetterQuery(req.body, 'Hotels', 'hotelID');
+    const query = buildGetterQuery(req.body.hotelID, 'Hotels', 'hotelID');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
         return;
@@ -225,9 +225,9 @@ app.post('/api/login', (req, res) => {
         if(!user) {
         return res.status(404).json({ error: 'User not found.' });
     }
-    const checkPW = loginUtil.checkPass(db, password, user.password);
+    const checkPW = loginUtil.checkPass(password, user.password);
         if(!checkPW) {
-            return res.status(401).json({ message: 'Invalid password.' });
+            return res.status(401).json({ error: 'Invalid password.' });
     }
     
     return res.status(200).json({ message: 'Login successful.', userID: user.userID });
