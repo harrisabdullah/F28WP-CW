@@ -26,39 +26,56 @@ function displayBookings(bookings, userID) {
         }
 
         bookings.forEach(booking => {
-            const bookingCard = document.createElement('div');
-            bookingCard.id = `booking-${booking.bookingID}`;
-            bookingCard.className = 'booking-card';
-            bookingCard.innerHTML = `
-            <h3>Booking #${booking.bookingID}</h3>
-            <p><strong>Hotel ID:</strong> ${booking.hotelID}</p>
-            <p><strong>Start Date:</strong> ${booking.startDate}</p>
-            <p><strong>End Date:</strong> ${booking.endDate}</p>
-            <p><strong>Rooms:</strong></p>
-            <ul>
-                <li>Single: ${booking.single}</li>
-                <li>Double: ${booking.double}</li>
-                <li>Twin: ${booking.twin}</li>
-                <li>Penthouse: ${booking.penthouse}</li>
-            </ul>
-            <p><strong>Total Price:</strong> $${booking.price}</p>
-            <button id="${booking.bookingID}-cancel">cancel</button>
-        `;
-            bookingsGrid.appendChild(bookingCard);
-            document.getElementById(`${booking.bookingID}-cancel`).addEventListener('click', () => {
-            fetch('/api/cancelBooking', {
+            fetch("/api/getHotel", {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({
-                    userID: Number(userID),
-                    bookingID: booking.bookingID
-                })
-            }).then(_ => {
-                document.getElementById(`booking-${booking.bookingID}`).remove();
+                hotelID: booking.hotelID,
             })
-        });
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(res);
+                }
+                return res.json();
+            })
+            .then(hotel => {     
+                const bookingCard = document.createElement('div');
+                bookingCard.id = `booking-${booking.bookingID}`;
+                bookingCard.className = 'booking-card';
+                bookingCard.innerHTML = `
+                <h3>Booking #${booking.bookingID}</h3>
+                <p><strong>Hotel:</strong> ${hotel.name}</p>
+                <p><strong>Start Date:</strong> ${booking.startDate}</p>
+                <p><strong>End Date:</strong> ${booking.endDate}</p>
+                <p><strong>Rooms:</strong></p>
+                <ul>
+                    <li>Single: ${booking.single}</li>
+                    <li>Double: ${booking.double}</li>
+                    <li>Twin: ${booking.twin}</li>
+                    <li>Penthouse: ${booking.penthouse}</li>
+                </ul>
+                <p><strong>Total Price:</strong> $${booking.price}</p>
+                <button id="${booking.bookingID}-cancel">cancel</button>
+                `;
+                bookingsGrid.appendChild(bookingCard);
+                document.getElementById(`${booking.bookingID}-cancel`).addEventListener('click', () => {
+                fetch('/api/cancelBooking', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userID: Number(userID),
+                        bookingID: booking.bookingID
+                    })
+                }).then(_ => {
+                    document.getElementById(`booking-${booking.bookingID}`).remove();
+                })
+            });
+        })
     })
-    }
+}
 
 
     // Function to fetch and display bookings with timeout
