@@ -43,9 +43,9 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
             // Replace '/bookings.html' with the actual path to your booking page.
             window.location.href = '/bookings.html';
 
+            window.location.href = window.location.origin;   
         } else {
-            // Handle cases where the API gives a 200 OK but no userID
-            throw new Error('Login response did not include a userID.');
+            passwordError.textContent = "Invalid username or password.";
         }
     })
     .catch(err => {
