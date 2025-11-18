@@ -1,3 +1,5 @@
+const { json } = require("express");
+
 document.addEventListener('DOMContentLoaded', () => {
     const bookingsGrid = document.getElementById('bookings-grid');
 
@@ -11,17 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for userID in cookies
     const userID = getCookie('userID');
     if (!userID) {
+        console.warn('No userID found in cookies - redirecting to login');
         // Redirect to login if no userID
         window.location.href = '/login';
         return;
     }
 
-    // Function to fetch and display bookings
+    // Function to fetch and display bookings with timeout
     async function fetchBookings() {
+
         try {
-            const response = await fetch(`https://our-group-api.com/api/get_bookings?userID=${userID}`, {
+            const response = await fetch(window.location.origin + "/api/getBookings", {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userID: parseInt(userID)
+                })
             });
             if (!response.ok) throw new Error('Failed to fetch bookings');
             const bookings = await response.json();
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to cancel a booking
     async function cancelBooking(bookingID) {
         try {
-            const response = await fetch('https://our-group-api.com/api/cancel_booking', {
+            const response = await fetch('api/cancelBooking', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ bookingID: parseInt(bookingID) })
