@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginBtn = document.getElementById('login-btn');
     const signUpBtn = document.getElementById('sign-up-btn');
     const logoutBtn = document.getElementById('logout-btn'); // Get the new button
+    const addRoomBtn = document.getElementById("addRoomBtn");
+    if (addRoomBtn) {
+        addRoomBtn.addEventListener("click", addRoomType);
+    }
     
     function getCookie(name) {
         return document.cookie
@@ -14,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .find(row => row.startsWith(name + "="))
         ?.split("=")[1];
     }
+
+    
 
     
 function clearCookie(name, path = '/', domain = '') {
@@ -42,40 +48,70 @@ function clearCookie(name, path = '/', domain = '') {
             window.location.href = window.location.origin;   
 
             console.log(`Cookie '${name}' cleared using: ${cookieString}`);
-            document.getElementById('setMsg').textContent = `Cookie cleared: ${name}`;
+                document.getElementById('setMsg').textContent = `Cookie cleared: ${name}`;
 
-}
-    function checkLoginStatus() {
-        const username = getCookie('username'); // Assumes 'username' cookie is set upon login
-        
-        if (username) {
-            welcomeMessage.textContent = `Welcome, ${decodeURIComponent(username)}!`;
-            document.getElementById("login-btn").style.display = 'none';
-            document.getElementById("sign-up-btn").style.display = 'none';
-             document.getElementById("logout-btn").style.display = 'inline-block';
-        } else {
-            welcomeMessage.textContent = '';
-            document.getElementById("login-btn").style.display = '';
-            document.getElementById("sign-up-btn").style.display = '';
-            document.getElementById("logout-btn").style.display = 'none';
-        }
     }
+        function checkLoginStatus() {
+            const username = getCookie('username'); // Assumes 'username' cookie is set upon login
+            
+            if (username) {
+                welcomeMessage.textContent = `Welcome, ${decodeURIComponent(username)}!`;
+                document.getElementById("login-btn").style.display = 'none';
+                document.getElementById("sign-up-btn").style.display = 'none';
+                document.getElementById("logout-btn").style.display = 'inline-block';
+            } else {
+                welcomeMessage.textContent = '';
+                document.getElementById("login-btn").style.display = '';
+                document.getElementById("sign-up-btn").style.display = '';
+                document.getElementById("logout-btn").style.display = 'none';
+            }
+        }
 
 
 
-    logoutBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Clear both cookies
-        clearCookie('userID');
-        clearCookie('username');
-        
-        // Update UI and redirect (or simply reload the page)
-        location.reload(); 
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Clear both cookies
+            clearCookie('userID');
+            clearCookie('username');
+            
+            // Update UI and redirect (or simply reload the page)
+            location.reload(); 
 
 
-    });
+        });
 
-    checkLoginStatus();
+        checkLoginStatus();
+
+         
+        function addRoomType() {
+                console.log("addRoomType triggered"); // <-- test
+
+        const select = document.getElementById("roomTypeSelect");
+        const container = document.getElementById("selectedRooms");
+        const val = select.value;
+        if (!val) return alert("Select a room type");
+
+        if (document.getElementById("room-" + val.toLowerCase())) {
+            return alert("You've already added this room");
+        }
+
+        const div = document.createElement("div");
+        div.id = "room-" + val.toLowerCase();
+        div.className = "room-entry";
+        div.innerHTML = `<label>${val}</label>
+                        <input type="number" min="1" value="1">`;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.textContent = "Remove";
+        removeBtn.addEventListener("click", () => div.remove());
+
+        div.appendChild(removeBtn);
+        container.appendChild(div);
+
+        select.value = ""; 
+    }
 
     searchForm.addEventListener('submit', async (event) => {
 
@@ -84,14 +120,13 @@ function clearCookie(name, path = '/', domain = '') {
         const destination = document.getElementById('destination').value;
         const checkIn = document.getElementById('check-in').value;
         const checkOut = document.getElementById('check-out').value;
-        const guests = Number(document.getElementById('guests').value);
-
         const roomConfig = {
-            single: guests, 
-            double: 0,
-            twin: 0,
-            penthouse: 0
+            single: Number(document.querySelector('#room-single input')?.value) || 0,
+            double: Number(document.querySelector('#room-double input')?.value) || 0,
+            twin: Number(document.querySelector('#room-twin input')?.value) || 0,
+            penthouse: Number(document.querySelector('#room-penthouse input')?.value) || 0
         };
+
 
         const requestBody = {
             name: "", 
@@ -102,6 +137,7 @@ function clearCookie(name, path = '/', domain = '') {
             city: destination,
             roomConfig: roomConfig
         };
+        console.log(requestBody)
         
         try {
             const response = await fetch('/api/search', {
@@ -122,16 +158,15 @@ function clearCookie(name, path = '/', domain = '') {
         sessionStorage.setItem('startDate', checkIn);
         sessionStorage.setItem('endDate', checkOut);
 
-        // TODO: collect this input pls 
-        // sessionStorage.setItem('single', numOfSingleRooms);
-        // sessionStorage.setItem('double', numOfDoubleRooms);
-        // sessionStorage.setItem('twin', numOfTwinRooms);
-        // sessionStorage.setItem('penthouse', numOfPenthouseRooms);
+
+        sessionStorage.setItem('single', roomConfig.single);
+        sessionStorage.setItem('double', roomConfig.double);
+        sessionStorage.setItem('twin', roomConfig.twin);
+        sessionStorage.setItem('penthouse', roomConfig.penthouse);
 
         displayResults(hotels);
 
         } catch (error) {
-            console.error("API Error:", error);
             resultsContainer.innerHTML = `<p class="error">Something went wrong while searching.</p>`;
         }
     });
