@@ -119,6 +119,15 @@ function clearCookie(name, path = '/', domain = '') {
         const hotels = await response.json();
         console.log("Received:", hotels);
 
+        sessionStorage.setItem('startDate', checkIn);
+        sessionStorage.setItem('endDate', checkOut);
+
+        // TODO: collect this input pls 
+        // sessionStorage.setItem('single', numOfSingleRooms);
+        // sessionStorage.setItem('double', numOfDoubleRooms);
+        // sessionStorage.setItem('twin', numOfTwinRooms);
+        // sessionStorage.setItem('penthouse', numOfPenthouseRooms);
+
         displayResults(hotels);
 
         } catch (error) {
@@ -138,8 +147,6 @@ function clearCookie(name, path = '/', domain = '') {
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
             hotelCard.className = 'hotel-card';
-
-            
             
             hotelCard.innerHTML = `
                 <img src="${hotel.image}" alt="${hotel.name}">
