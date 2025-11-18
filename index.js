@@ -176,7 +176,7 @@ app.post('/api/login', (req, res) => {
         if(!user) {
         return res.status(404).json({ error: 'User not found.' });
     }
-    const checkPW = loginUtil.checkPass(db, password, user.password);
+    const checkPW = loginUtil.checkPass(password, user.password);
         if(!checkPW) {
             return res.status(401).json({ message: 'Invalid password.' });
     }
