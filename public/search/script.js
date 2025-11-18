@@ -79,11 +79,13 @@ function clearCookie(name, path = '/', domain = '') {
                 document.getElementById("login-btn").style.display = 'none';
                 document.getElementById("sign-up-btn").style.display = 'none';
                 document.getElementById("logout-btn").style.display = 'inline-block';
+                document.getElementById("bookings-btn").style.display = 'inline-block';
             } else {
                 welcomeMessage.textContent = '';
                 document.getElementById("login-btn").style.display = '';
                 document.getElementById("sign-up-btn").style.display = '';
                 document.getElementById("logout-btn").style.display = 'none';
+                document.getElementById("bookings-btn").style.display = 'none';
             }
         }
 
