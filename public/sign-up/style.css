@@ -1,65 +1,139 @@
-/* Using CSS variables for easy-to-change colors */
+/* ------------------------------ */
+/* GLOBAL BASE STYLES             */
+/* ------------------------------ */
 body {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: rgb(173, 218, 234);
-    color: purple;
-    flex-wrap: wrap;
-}
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Times New Roman', Times, serif;
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+background: #f5f7fa;
+color: #333333;
+line-height: 1.5;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
 }
 
-.signup{
-    background: purple;
-    width: 400px;
-    color: green;
-
-}
-
+/* Headings */
 h1 {
-    text-align: center;
-    color: black;
+font-size: 32px;
+font-weight: bold;
+color: white;
+text-align: center;
+margin: 0;
+}
+h2 {
+font-size: 22px;
+color: #555;
+font-weight: bold;
+text-align: center;
+margin-top: 30px;
+margin-bottom: 20px;
 }
 
-.signup .input-box {
-    width: 100%;
-    height: 50px;
-    background: aquamarine;
-    margin: 30px 0;
+/* ------------------------------ */
+/* HEADER                         */
+/* ------------------------------ */
+header {
+background: #3b4cca;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 15px;
+}
+
+header .back-btn {
+background: #6a7fff;
+color: white;
+padding: 8px 15px;
+border-radius: 6px;
+text-decoration: none;
+font-size: 15px;
+transition: background 0.3s;
+}
+
+header .back-btn:hover {
+background: #5a6de0;
+}
+
+/* ------------------------------ */
+/* SIGNUP FORM CONTAINER          */
+/* ------------------------------ */
+.signup {
+max-width: 450px;
+margin: 30px auto 60px;
+padding: 25px;
+background: #ffffff;
+border-radius: 10px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+/* ------------------------------ */
+/* FORM INPUTS                    */
+/* ------------------------------ */
+.input-box {
+display: flex;
+flex-direction: column;
+margin-bottom: 18px;
+}
+
+.input-box label {
+margin-bottom: 6px;
+font-weight: bold;
+color: #333;
 }
 
 .input-box input {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    border: 2px solid;
-    border-radius: 40px;
-
+padding: 10px 12px;
+font-size: 15px;
+border: 1px solid #cccccc;
+border-radius: 6px;
+outline: none;
+transition: border 0.3s;
 }
 
+.input-box input:focus {
+border-color: #3b4cca;
+}
 
+/* ------------------------------ */
+/* REMEMBER / BUTTON SECTION       */
+/* ------------------------------ */
+.remember {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 15px;
+}
 
+#message {
+font-size: 14px;
+color: red;
+min-height: 18px;
+}
 
+.signup-button {
+background: #3b4cca;
+color: white;
+font-size: 16px;
+padding: 12px 25px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+width: 100%;
+transition: background 0.3s;
+}
 
+.signup-button:hover {
+background: #2f3ca5;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+/* ------------------------------ */
+/* MOBILE                          */
+/* ------------------------------ */
+@media (max-width: 600px) {
+.signup {
+margin: 20px 15px;
+padding: 20px;
+}
+}

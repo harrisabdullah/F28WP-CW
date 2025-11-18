@@ -1,82 +1,221 @@
-/// Waits for the entire HTML document to be loaded before running the script
+
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Gets references to the HTML elements we need
     const searchForm = document.getElementById('search-form');
     const resultsContainer = document.getElementById('results-grid');
+    const welcomeMessage = document.getElementById('welcome-message');
+    const loginBtn = document.getElementById('login-btn');
+    const signUpBtn = document.getElementById('sign-up-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const addRoomBtn = document.getElementById("addRoomBtn");
+    if (addRoomBtn) {
+        addRoomBtn.addEventListener("click", addRoomType);
+    }
+    
+    function getCookie(name) {
+        return document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="))
+        ?.split("=")[1];
+    }
 
-    // Adds an event listener for the form's 'submit' event
-    searchForm.addEventListener('submit', (event) => {
-        // Prevents the form from doing its default behavior (refreshing the page)
+    function daysBetween(startStr, endStr) {
+    const start = new Date(startStr);
+    const end = new Date(endStr);
+
+    const diffMs = end - start;
+    return Math.round(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function getPrice(hotel, query, start, end) {
+    const duration = daysBetween(start, end);
+
+    const price =
+        ((hotel.singleRoomPrice * query.single) +
+        (hotel.doubleRoomPrice * query.double) +
+        (hotel.twinRoomPrice * query.twin) +
+        (hotel.penthousePrice * query.penthouse))
+        * duration;
+
+    return price;
+    }
+    
+
+    
+function clearCookie(name, path = '/', domain = '') {
+    if (document.cookie.indexOf (name + "=") === -1) {
+        console.log(`Cookie '$(name)' not found.`);
+        return;
+    }
+
+      let expiry = new Date(0).toUTCString(); 
+
+            // Construct the deletion string
+            let cookieString = name + '=; expires=' + expiry;
+
+            // Append optional path (required to match original cookie setting)
+            if (path) {
+                cookieString += '; path=' + path;
+            }
+
+            // Append optional domain (required to match original cookie setting)
+            if (domain) {
+                cookieString += '; domain=' + domain;
+            }
+
+            // Set the cookie, which triggers deletion
+            document.cookie = cookieString;
+            window.location.href = window.location.origin;   
+
+            console.log(`Cookie '${name}' cleared using: ${cookieString}`);
+                document.getElementById('setMsg').textContent = `Cookie cleared: ${name}`;
+
+    }
+        function checkLoginStatus() {
+            const username = getCookie('username'); // Assumes 'username' cookie is set upon login
+            
+            if (username) {
+                welcomeMessage.textContent = `Welcome, ${decodeURIComponent(username)}!`;
+                document.getElementById("login-btn").style.display = 'none';
+                document.getElementById("sign-up-btn").style.display = 'none';
+                document.getElementById("logout-btn").style.display = 'inline-block';
+                document.getElementById("bookings-btn").style.display = 'inline-block';
+            } else {
+                welcomeMessage.textContent = '';
+                document.getElementById("login-btn").style.display = '';
+                document.getElementById("sign-up-btn").style.display = '';
+                document.getElementById("logout-btn").style.display = 'none';
+                document.getElementById("bookings-btn").style.display = 'none';
+            }
+        }
+
+
+
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Clear both cookies
+            clearCookie('userID');
+            clearCookie('username');
+            
+            // Update UI and redirect (or simply reload the page)
+            location.reload(); 
+
+
+        });
+
+        checkLoginStatus();
+
+         
+        function addRoomType() {
+                console.log("addRoomType triggered"); // <-- test
+
+        const select = document.getElementById("roomTypeSelect");
+        const container = document.getElementById("selectedRooms");
+        const val = select.value;
+        if (!val) return alert("Select a room type");
+
+        if (document.getElementById("room-" + val.toLowerCase())) {
+            return alert("You've already added this room");
+        }
+
+        const div = document.createElement("div");
+        div.id = "room-" + val.toLowerCase();
+        div.className = "room-entry";
+        div.innerHTML = `<label>${val}</label>
+                        <input type="number" min="1" value="1">`;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.textContent = "Remove";
+        removeBtn.addEventListener("click", () => div.remove());
+
+        div.appendChild(removeBtn);
+        container.appendChild(div);
+
+        select.value = ""; 
+    }
+
+    searchForm.addEventListener('submit', async (event) => {
+
         event.preventDefault();
 
-        // 1. Gets the values from the form inputs
         const destination = document.getElementById('destination').value;
         const checkIn = document.getElementById('check-in').value;
         const checkOut = document.getElementById('check-out').value;
-        const guests = document.getElementById('guests').value;
+        const maxPrice = document.getElementById('max-price').value;
+        const minPrice = document.getElementById('min-price').value;
+        const roomConfig = {
+            single: Number(document.querySelector('#room-single input')?.value) || 0,
+            double: Number(document.querySelector('#room-double input')?.value) || 0,
+            twin: Number(document.querySelector('#room-twin input')?.value) || 0,
+            penthouse: Number(document.querySelector('#room-penthouse input')?.value) || 0
+        };
 
-        // 2. (For now) Log the data to the console to make sure it's working
-        console.log('Search criteria:', {
-            destination,
-            checkIn,
-            checkOut,
-            guests
-        });
 
-        // 3. This is where we will call our API
-        // Group members working on the API will advise how to
-        // use 'fetch' to send this data and get results.
+        const requestBody = {
+            name: "", 
+            minPrice: Number(minPrice),
+            maxPrice: Number(maxPrice),
+            startDate: checkIn,
+            endDate: checkOut,
+            city: destination,
+            roomConfig: roomConfig
+        };
+        console.log(requestBody)
         
-        // Example of what the API call might look like:
-        /*
-        fetch(`https://your-group-api.com/search?dest=${destination}&checkin=${checkIn}&checkout=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the list of hotels from the API
-                displayResults(data);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = '<p>Sorry, something went wrong. Please try again.</p>';
+        try {
+            const response = await fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
             });
-        */
-        
-        // For testing, we can add a fake result:
-        resultsContainer.innerHTML = `
-            <article class="hotel-card">
-                <h3>Test Hotel in ${destination}</h3>
-                <p>Check-in: ${checkIn}</p>
-                <p>Guests: ${guests}</p>
-            </article>
-        `;
 
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}`);
+        }
+
+        const hotels = await response.json();
+        console.log("Received:", hotels);
+
+        sessionStorage.setItem('startDate', checkIn);
+        sessionStorage.setItem('endDate', checkOut);
+        sessionStorage.setItem('maxPrice', maxPrice);
+        sessionStorage.setItem('minPrice', minPrice);
+
+
+        sessionStorage.setItem('single', roomConfig.single);
+        sessionStorage.setItem('double', roomConfig.double);
+        sessionStorage.setItem('twin', roomConfig.twin);
+        sessionStorage.setItem('penthouse', roomConfig.penthouse);
+
+        displayResults(hotels, roomConfig, checkIn, checkOut);
+
+        } catch (error) {
+            resultsContainer.innerHTML = `<p class="error">Something went wrong while searching.</p>`;
+        }
     });
 
-    // 4. A function to display the results (we'll use this with our API)
-    function displayResults(hotels) {
-        // Clears any previous results
+    function displayResults(hotels, roomConfig, start, end) {
         resultsContainer.innerHTML = '';
 
-        if (hotels.length === 0) {
+        if (!hotels || hotels.length === 0) {
             resultsContainer.innerHTML = '<p>No hotels found matching your criteria.</p>';
             return;
         }
 
-        // Loops through each hotel in the results and creates an HTML card for it
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
-            hotelCard.className = 'hotel-card'; // Adds a class for styling
+            const price = getPrice(hotel, roomConfig, start, end);
+            hotelCard.className = 'hotel-card';
             
             hotelCard.innerHTML = `
-                <img src="${hotel.imageUrl}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
-                <p>${hotel.location}</p>
-                <p><strong>£${hotel.pricePerNight}</strong> / night</p>
-            `;
+                <p>£${price}</p>      
+                <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
             
             resultsContainer.appendChild(hotelCard);
         });
     }
-
 });
