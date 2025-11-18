@@ -83,11 +83,11 @@ function updateHTML(hotel, query, price) {
 document.addEventListener('DOMContentLoaded', () => {
     const hotelID = Number(location.pathname.split('/').filter(Boolean).pop());
     if (!Number.isInteger(hotelID)){
-        // TODO: error page
+        window.location.href = "/error";
     }
     const userID = Number(getCookie('userID'));
     if (!Number.isInteger(userID)){
-        // TODO: error page
+        window.location.href = "/login";
     }
     fetch("/api/getHotel", {
         method: 'POST',
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return res.json();
             }).then(data => {
-                console.log({data});
+                window.location.href = "/bookings";
             })
         })
     })
