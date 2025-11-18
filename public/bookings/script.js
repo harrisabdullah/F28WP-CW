@@ -19,20 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to fetch and display bookings with timeout
     async function fetchBookings() {
-
         try {
-            const response = await fetch(window.location.origin + "http://localhost:3000/bookings/", {
-                method: 'POST',
+            const response = await fetch('http://localhost:3000/bookings', {
+                method: 'POST', // Changed to POST to support body
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     userID: parseInt(userID)
                 })
             });
-            if (!response.ok){
-                console.log(userID);
-                throw new Error('Failed to fetch bookings');
-            }
+            if (!response.ok) throw new Error('Failed to fetch bookings');
             const bookings = await response.json();
+
             displayBookings(bookings);
         } catch (error) {
             console.error('Error fetching bookings:', error);
@@ -49,44 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        console.log('Bookings fetched:', bookings);
-        
         bookings.forEach(booking => {
             const bookingCard = document.createElement('div');
             bookingCard.className = 'booking-card';
 
-            // Assuming `bookings` is the array fetched from the backend
-bookings.forEach(booking => {
-    const bookingCard = document.createElement('div');
-    bookingCard.classList.add('booking-card');
+            const roomConfig = booking.roomConfig;
+            bookingCard.innerHTML = `
+                <img src="${booking.image}" alt="${booking.name}">
+                <h3>${booking.name}</h3>
+                <p>Dates: ${booking.startDate} to ${booking.endDate}</p>
+                <p>Rooms: Single: ${roomConfig.single}, Double: ${roomConfig.double}, Twin: ${roomConfig.twin}, Penthouse: ${roomConfig.penthouse}</p>
+                <p>Price: £${booking.price}</p>
+                <p>Contact: fakehotel@email.com (fake for demo)</p>
+                <button class="cancel-button" data-booking-id="${booking.bookingID}">Cancel Booking</button>
+            `;
 
-    // Parse and map raw data to expected keys
-    const parsedBooking = {
-        image: 'images/hotel-default.jpg', // Replace with actual image logic if available
-        name: `Hotel ${booking.hotelID}`,  // You can customize this further
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-        singleCount: booking.single,
-        doubleCount: booking.double,
-        twinCount: booking.twin,
-        penthouseCount: booking.penthouse,
-        price: booking.price,
-        bookingID: booking.bookingID
-    };
-
-    // Inject parsed data into HTML
-    bookingCard.innerHTML = `
-        <img src="${parsedBooking.image}" alt="${parsedBooking.name}">
-        <h3>${parsedBooking.name}</h3>
-        <p>Dates: ${parsedBooking.startDate} to ${parsedBooking.endDate}</p>
-        <p>Rooms: Single: ${parsedBooking.singleCount}, Double: ${parsedBooking.doubleCount}, Twin: ${parsedBooking.twinCount}, Penthouse: ${parsedBooking.penthouseCount}</p>
-        <p>Price: £${parsedBooking.price}</p>
-        <p>Contact: fakehotel@email.com (fake for demo)</p>
-        <button class="cancel-button" data-booking-id="${parsedBooking.bookingID}">Cancel Booking</button>
-    `;
-
-    document.querySelector('#bookings-container').appendChild(bookingCard);
-});
+            bookingsGrid.appendChild(bookingCard);
         });
 
         // Add event listeners for cancel buttons
@@ -98,11 +73,10 @@ bookings.forEach(booking => {
         });
     }
 
- 
     // Function to cancel a booking (now includes userID for authentication)
     async function cancelBooking(bookingID) {
         try {
-            const response = await fetch('http://localhost:3000/booking/', {
+            const response = await fetch('http://localhost:3000/cancel-booking', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
