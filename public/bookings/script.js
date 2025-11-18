@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to fetch and display bookings with timeout
     async function fetchBookings() {
         try {
-            const response = await fetch('http://localhost:3000/bookings', {
+            const response = await fetch('api/getBookings', {
                 method: 'POST', // Changed to POST to support body
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to cancel a booking (now includes userID for authentication)
     async function cancelBooking(bookingID) {
         try {
-            const response = await fetch('http://localhost:3000/cancel-booking', {
+            const response = await fetch('api/cancelBooking', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
