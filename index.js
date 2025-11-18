@@ -133,7 +133,7 @@ const dbAll = (sql, params) => {
 };
 
 app.post('/api/getBookings', async (req, res) => {
-    const query = buildGetterQuery(req.body, 'Bookings', 'user');
+    const query = buildGetterQuery(req.body.userID, 'Bookings', 'user');
     if (query == -1) {
         res.status(400).json({ error: 'Invalid request' });
         return;
@@ -190,6 +190,7 @@ app.post('/api/getHotel', (req, res) => {
         res.status(400).json({ error: 'Invalid request' });
         return;
     }
+
     db.get(query[0], query[1], (err, row) => {
         if (err){
             console.error('Database error:', err.message);
