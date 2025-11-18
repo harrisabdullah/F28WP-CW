@@ -11,21 +11,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for userID in cookies
     const userID = getCookie('userID');
     if (!userID) {
+        console.warn('No userID found in cookies - redirecting to login');
         // Redirect to login if no userID
         window.location.href = '/login';
         return;
     }
 
-    // Function to fetch and display bookings
+    // Function to fetch and display bookings with timeout
     async function fetchBookings() {
-        try {
-            const response = await fetch(`https://our-group-api.com/api/get_bookings?userID=${userID}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            if (!response.ok) throw new Error('Failed to fetch bookings');
-            const bookings = await response.json();
 
+        try {
+            const response = await fetch(window.location.origin + "/api/getBookings", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userID: parseInt(userID)
+                })
+            });
+            if (!response.ok){
+                console.log(userID);
+                throw new Error('Failed to fetch bookings');
+            }
+            const bookings = await response.json();
             displayBookings(bookings);
         } catch (error) {
             console.error('Error fetching bookings:', error);
@@ -42,16 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        console.log('Bookings fetched:', bookings);
         bookings.forEach(booking => {
             const bookingCard = document.createElement('div');
             bookingCard.className = 'booking-card';
 
-            const roomConfig = booking.roomConfig;
             bookingCard.innerHTML = `
                 <img src="${booking.image}" alt="${booking.name}">
                 <h3>${booking.name}</h3>
                 <p>Dates: ${booking.startDate} to ${booking.endDate}</p>
-                <p>Rooms: Single: ${roomConfig.single}, Double: ${roomConfig.double}, Twin: ${roomConfig.twin}, Penthouse: ${roomConfig.penthouse}</p>
+                <p>Rooms: Single: ${booking.singleCount}, Double: ${booking.doubleCount}, Twin: ${booking.twinCount}, Penthouse: ${booking.penthouseCount}</p>
                 <p>Price: £${booking.price}</p>
                 <p>Contact: fakehotel@email.com (fake for demo)</p>
                 <button class="cancel-button" data-booking-id="${booking.bookingID}">Cancel Booking</button>
@@ -72,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to cancel a booking
     async function cancelBooking(bookingID) {
         try {
-            const response = await fetch('https://our-group-api.com/api/cancel_booking', {
+            const response = await fetch('api/cancelBooking', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ bookingID: parseInt(bookingID) })

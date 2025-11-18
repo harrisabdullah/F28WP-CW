@@ -39,7 +39,7 @@ function clearCookie(name, path = '/', domain = '') {
 
             // Set the cookie, which triggers deletion
             document.cookie = cookieString;
-            updateCookieDisplay(); // Refresh UI
+            window.location.href = window.location.origin;   
 
             console.log(`Cookie '${name}' cleared using: ${cookieString}`);
             document.getElementById('setMsg').textContent = `Cookie cleared: ${name}`;
