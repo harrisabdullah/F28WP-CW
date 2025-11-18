@@ -1,5 +1,3 @@
-const { json } = require("express");
-
 document.addEventListener('DOMContentLoaded', () => {
     const bookingsGrid = document.getElementById('bookings-grid');
 
@@ -24,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(window.location.origin + "/api/getBookings", {
-                method: 'GET',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     userID: parseInt(userID)
@@ -32,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             if (!response.ok) throw new Error('Failed to fetch bookings');
             const bookings = await response.json();
-
             displayBookings(bookings);
         } catch (error) {
             console.error('Error fetching bookings:', error);
@@ -49,16 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        console.log('Bookings fetched:', bookings);
         bookings.forEach(booking => {
             const bookingCard = document.createElement('div');
             bookingCard.className = 'booking-card';
 
-            const roomConfig = booking.roomConfig;
             bookingCard.innerHTML = `
                 <img src="${booking.image}" alt="${booking.name}">
                 <h3>${booking.name}</h3>
                 <p>Dates: ${booking.startDate} to ${booking.endDate}</p>
-                <p>Rooms: Single: ${roomConfig.single}, Double: ${roomConfig.double}, Twin: ${roomConfig.twin}, Penthouse: ${roomConfig.penthouse}</p>
+                <p>Rooms: Single: ${booking.singleCount}, Double: ${booking.doubleCount}, Twin: ${booking.twinCount}, Penthouse: ${booking.penthouseCount}</p>
                 <p>Price: £${booking.price}</p>
                 <p>Contact: fakehotel@email.com (fake for demo)</p>
                 <button class="cancel-button" data-booking-id="${booking.bookingID}">Cancel Booking</button>
