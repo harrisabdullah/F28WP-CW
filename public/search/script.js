@@ -212,7 +212,6 @@ function clearCookie(name, path = '/', domain = '') {
             
             hotelCard.innerHTML = `
                 <h3>${hotel.name}</h3>
-                <p>${hotel.description}</p>   
                 <p>£${price}</p>      
                 <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
             
