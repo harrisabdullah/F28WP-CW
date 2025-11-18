@@ -162,7 +162,12 @@ app.post('/api/getBookings', async (req, res) => {
                                              duration);
             
             return pricePromise.then(price => ({
+<<<<<<< Updated upstream
                 hotelID: element.hotelID,
+=======
+                hotelID: element.hotel,
+                bookingID: element.bookingID,
+>>>>>>> Stashed changes
                 single: element.singleCount,
                 double: element.doubleCount,
                 twin: element.twinCount,
