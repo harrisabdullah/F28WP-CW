@@ -1,18 +1,18 @@
-// File: login.js (or similar)
 
 document.getElementById("login-form").addEventListener("submit", function (e) {
     e.preventDefault(); // Keep this! It's important.
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const passwordError = document.getElementById("passwordError");
 
-    // Optional: Basic client-side validation
+
     if (!username || !password) {
         alert("Please enter both username and password.");
         return;
     }
 
-    fetch("/api/login", { // No need for window.location.origin, relative paths work best.
+    fetch("/api/login", { 
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
@@ -23,18 +23,16 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         })
     })
     .then(res => {
-        // Check if the response was successful (status code 200-299)
         if (!res.ok) {
-            // If not, throw an error to be caught by the .catch block
             throw new Error('Login failed. Please check your credentials.');
         }
         return res.json();
     })
     .then(data => {
         console.log("Login successful, data received:", data);
+        console.log("Raw response JSON:", data);
 
         if (data.userID) {
-            // Set the cookie
             document.cookie = `userID=${data.userID}; path=/; max-age=86400`; // 86400 seconds = 1 day
             console.log("Saved userID to cookie:", data.userID);
 
@@ -48,6 +46,6 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
     .catch(err => {
         // Display errors to the user
         console.error(err);
-        passwordError.textContent = "Invalid username or password.";
+        alert(err.message); // Simple way to show the error to the user
     });
 });
