@@ -162,7 +162,7 @@ app.post('/api/getBookings', async (req, res) => {
                                              duration);
             
             return pricePromise.then(price => ({
-                hotelID: element.hotelID,
+                hotelID: element.hotel,
                 bookingID: element.bookingID,
                 single: element.singleCount,
                 double: element.doubleCount,
@@ -280,5 +280,25 @@ app.post('/api/getBooking', (req, res) => {
 
         res.status(200).json(rows);
 
+    })
+})
+
+app.post('/api/getLogin', (req, res) => {
+    const userID = parseInt(req.query.userID);
+
+    if(!userID) {
+        return res.status(401).json({ message: 'Invalid or session expired.' })
+    }
+
+    const query = 'SELECT username FROM Users WHERE userID = ?'
+
+    db.get(query, [userID], (err, user) => {
+        if(err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Database error. '})
+        }
+
+
+        return res.status(200).json({ message: 'Login successful.', username: user.username });
     })
 })
