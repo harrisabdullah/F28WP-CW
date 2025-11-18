@@ -1,4 +1,4 @@
-async function checkPass (db, password, dbPassword){
+function checkPass (password, dbPassword){
     return password == dbPassword;
 }
 

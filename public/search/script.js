@@ -1,82 +1,160 @@
-/// Waits for the entire HTML document to be loaded before running the script
+
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Gets references to the HTML elements we need
     const searchForm = document.getElementById('search-form');
     const resultsContainer = document.getElementById('results-grid');
+    const welcomeMessage = document.getElementById('welcome-message');
+    const loginBtn = document.getElementById('login-btn');
+    const signUpBtn = document.getElementById('sign-up-btn');
+    const logoutBtn = document.getElementById('logout-btn'); // Get the new button
+    
+    function getCookie(name) {
+        return document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="))
+        ?.split("=")[1];
+    }
 
-    // Adds an event listener for the form's 'submit' event
-    searchForm.addEventListener('submit', (event) => {
-        // Prevents the form from doing its default behavior (refreshing the page)
-        event.preventDefault();
+    
+function clearCookie(name, path = '/', domain = '') {
+    if (document.cookie.indexOf (name + "=") === -1) {
+        console.log(`Cookie '$(name)' not found.`);
+        return;
+    }
 
-        // 1. Gets the values from the form inputs
-        const destination = document.getElementById('destination').value;
-        const checkIn = document.getElementById('check-in').value;
-        const checkOut = document.getElementById('check-out').value;
-        const guests = document.getElementById('guests').value;
+      let expiry = new Date(0).toUTCString(); 
 
-        // 2. (For now) Log the data to the console to make sure it's working
-        console.log('Search criteria:', {
-            destination,
-            checkIn,
-            checkOut,
-            guests
-        });
+            // Construct the deletion string
+            let cookieString = name + '=; expires=' + expiry;
 
-        // 3. This is where we will call our API
-        // Group members working on the API will advise how to
-        // use 'fetch' to send this data and get results.
+            // Append optional path (required to match original cookie setting)
+            if (path) {
+                cookieString += '; path=' + path;
+            }
+
+            // Append optional domain (required to match original cookie setting)
+            if (domain) {
+                cookieString += '; domain=' + domain;
+            }
+
+            // Set the cookie, which triggers deletion
+            document.cookie = cookieString;
+            window.location.href = window.location.origin;   
+
+            console.log(`Cookie '${name}' cleared using: ${cookieString}`);
+            document.getElementById('setMsg').textContent = `Cookie cleared: ${name}`;
+
+}
+    function checkLoginStatus() {
+        const username = getCookie('username'); // Assumes 'username' cookie is set upon login
         
-        // Example of what the API call might look like:
-        /*
-        fetch(`https://your-group-api.com/search?dest=${destination}&checkin=${checkIn}&checkout=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the list of hotels from the API
-                displayResults(data);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = '<p>Sorry, something went wrong. Please try again.</p>';
-            });
-        */
+        if (username) {
+            welcomeMessage.textContent = `Welcome, ${decodeURIComponent(username)}!`;
+            document.getElementById("login-btn").style.display = 'none';
+            document.getElementById("sign-up-btn").style.display = 'none';
+             document.getElementById("logout-btn").style.display = 'inline-block';
+        } else {
+            welcomeMessage.textContent = '';
+            document.getElementById("login-btn").style.display = '';
+            document.getElementById("sign-up-btn").style.display = '';
+            document.getElementById("logout-btn").style.display = 'none';
+        }
+    }
+
+
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Clear both cookies
+        clearCookie('userID');
+        clearCookie('username');
         
-        // For testing, we can add a fake result:
-        resultsContainer.innerHTML = `
-            <article class="hotel-card">
-                <h3>Test Hotel in ${destination}</h3>
-                <p>Check-in: ${checkIn}</p>
-                <p>Guests: ${guests}</p>
-            </article>
-        `;
+        // Update UI and redirect (or simply reload the page)
+        location.reload(); 
+
 
     });
 
-    // 4. A function to display the results (we'll use this with our API)
+    checkLoginStatus();
+
+    searchForm.addEventListener('submit', async (event) => {
+
+        event.preventDefault();
+
+        const destination = document.getElementById('destination').value;
+        const checkIn = document.getElementById('check-in').value;
+        const checkOut = document.getElementById('check-out').value;
+        const guests = Number(document.getElementById('guests').value);
+
+        const roomConfig = {
+            single: guests, 
+            double: 0,
+            twin: 0,
+            penthouse: 0
+        };
+
+        const requestBody = {
+            name: "", 
+            minPrice: 0,
+            maxPrice: 9999,
+            startDate: checkIn,
+            endDate: checkOut,
+            city: destination,
+            roomConfig: roomConfig
+        };
+        
+        try {
+            const response = await fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}`);
+        }
+
+        const hotels = await response.json();
+        console.log("Received:", hotels);
+
+        sessionStorage.setItem('startDate', checkIn);
+        sessionStorage.setItem('endDate', checkOut);
+
+        // TODO: collect this input pls 
+        // sessionStorage.setItem('single', numOfSingleRooms);
+        // sessionStorage.setItem('double', numOfDoubleRooms);
+        // sessionStorage.setItem('twin', numOfTwinRooms);
+        // sessionStorage.setItem('penthouse', numOfPenthouseRooms);
+
+        displayResults(hotels);
+
+        } catch (error) {
+            console.error("API Error:", error);
+            resultsContainer.innerHTML = `<p class="error">Something went wrong while searching.</p>`;
+        }
+    });
+
     function displayResults(hotels) {
-        // Clears any previous results
         resultsContainer.innerHTML = '';
 
-        if (hotels.length === 0) {
+        if (!hotels || hotels.length === 0) {
             resultsContainer.innerHTML = '<p>No hotels found matching your criteria.</p>';
             return;
         }
 
-        // Loops through each hotel in the results and creates an HTML card for it
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
-            hotelCard.className = 'hotel-card'; // Adds a class for styling
+            hotelCard.className = 'hotel-card';
             
             hotelCard.innerHTML = `
-                <img src="${hotel.imageUrl}" alt="${hotel.name}">
+                <img src="${hotel.image}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
-                <p>${hotel.location}</p>
-                <p><strong>£${hotel.pricePerNight}</strong> / night</p>
-            `;
+                <p>${hotel.description}</p>         
+                <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
             
             resultsContainer.appendChild(hotelCard);
         });
     }
-
 });

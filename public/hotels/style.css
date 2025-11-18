@@ -1,0 +1,114 @@
+/* General page styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Hotel heading section */
+.hotel-heading {
+    text-align: center;
+    background-color: #fff;
+    padding: 30px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.hotel-heading h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #2c3e50;
+}
+
+.hotel-heading h2 {
+    margin: 5px 0;
+    font-size: 1.5em;
+    color: #34495e;
+}
+
+.hotel-heading h3 {
+    margin: 5px 0 15px 0;
+    font-size: 1.2em;
+    color: #e67e22;
+}
+
+.hotel-heading img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+/* Booking dates */
+.dates {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+.dates div {
+    font-size: 1.1em;
+}
+
+/* Room list */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 20px 20px 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+ul div {
+    background-color: #fff;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    font-size: 1em;
+}
+
+/* Total price */
+#total-price {
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #27ae60;
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 20px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#book-button {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #e67e22;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#book-button:hover {
+    background-color: #d35400;
+    transform: scale(1.05);
+}
+
+#book-button:active {
+    background-color: #c0392b;
+    transform: scale(0.98);
+}

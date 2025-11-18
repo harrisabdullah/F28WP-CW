@@ -87,7 +87,7 @@ function dbinit(){
                     (4, 4, '2025-04-10', '2025-04-14', 0, 1, 0, 1),
                     (5, 5, '2025-05-20', '2025-05-25', 1, 1, 1, 0),
                     (6, 2, '2025-06-15', '2025-06-20', 0, 2, 1, 0),
-                    (7, 1, '2025-07-05', '2025-07-10', 1, 0, 1, 1);
+                    (1, 2, '2025-07-05', '2025-07-10', 1, 0, 1, 1);
             `;
             db.run(insertBookings, (err) => {
                 if (err) console.error('Error inserting sample bookings', err);
@@ -122,4 +122,38 @@ async function rowExists(db, table, field, value) {
   });
 }
 
-module.exports = { dbinit, rowExists };
+async function getPrice(db, hotelID, single, double, twin, penthouse, duration) {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT singleRoomPrice, twinRoomPrice, doubleRoomPrice, penthousePrice FROM Hotels WHERE hotelID = ?`;
+
+    db.get(sql, [hotelID], (err, row) => {
+      if (err) {
+        console.error("Database error fetching prices:", err.message);
+        return reject(new Error("Failed to fetch room prices."));
+      }
+
+      if (!row) {
+        console.warn(`No prices found for hotel ID: ${hotelID}`);
+        return resolve(0);
+      }
+
+      const singlePrice = row.singleRoomPrice || 0;
+      const doublePrice = row.doubleRoomPrice || 0;
+      const twinPrice = row.twinRoomPrice || 0;
+      const penthousePrice = row.penthousePrice || 0;
+
+      const subtotalPerDuration = (
+        (single * singlePrice) +
+        (double * doublePrice) +
+        (twin * twinPrice) +
+        (penthouse * penthousePrice)
+      );
+
+      const totalPrice = subtotalPerDuration * duration;
+      console.log(totalPrice);
+      resolve(totalPrice);
+    });
+  });
+}
+
+module.exports = { dbinit, rowExists, getPrice };

@@ -3,13 +3,14 @@ const path = require('path')
 const app = express()
 const port = 3000
 
-const { dbinit, rowExists } = require('./dbUtils')
+const { dbinit, rowExists, getPrice } = require('./dbUtils')
 const buildHotelSearchQuery = require('./api/buildHotelSearchQuery')
 const loginUtil = require('./api/login')
 const signupUtil = require('./api/signup')
 const buildMakeBookingQuery = require('./api/buildMakeBookingQuery')
 const buildCancelBookingQuery = require('./api/buildCancelBookingQuery')
 const buildGetterQuery = require('./api/buildGetterQuery')
+const daysBetween = require('./api/daysBetween')
 
 db = dbinit();
 
@@ -39,8 +40,8 @@ app.get('/error', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'error', 'error.html'))
 })
 
-app.get('/hotels/:hotelId', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'hotel-template', 'hotel-template.html'))
+app.get(/^\/hotels\/(\d+)/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'hotels', 'hotel-template.html'))
 })
 
 // APIs
@@ -119,24 +120,72 @@ app.post('/api/cancelBooking', async (req, res) => {
     })
 })
 
-app.get('/api/getBookings', (req, res) => {
+const dbAll = (sql, params) => {
+    return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
+
+app.post('/api/getBookings', async (req, res) => {
     const query = buildGetterQuery(req.body, 'Bookings', 'user');
-    if (query == -1){
+    if (query == -1) {
         res.status(400).json({ error: 'Invalid request' });
         return;
     }
-    db.all(query[0], query[1], (err, rows) => {
-        if (err){
-            console.error('Database error:', err.message);
-            res.status(500).json({ error: 'Database error' });
+
+    if (!(await rowExists(db, 'Users', 'userID', req.body.userID))) {
+        res.status(400).json({ error: 'User not found' });
+        return;
+    }
+
+    try {
+        const rows = await dbAll(query[0], query[1]);
+        
+        if (!rows || rows.length === 0) {
+            res.json([]);
             return;
         }
-        res.json(rows);
-    })
-})
 
-app.get('/api/getHotel', (req, res) => {
-    const query = buildGetterQuery(req.body, 'Hotels', 'hotelID');
+        const pricePromises = rows.map(element => {
+            const duration = daysBetween(element.startDate, element.endDate);
+            const pricePromise = getPrice(db, element.hotel, 
+                                             element.singleCount, 
+                                             element.doubleCount, 
+                                             element.twinCount, 
+                                             element.penthouseCount, 
+                                             duration);
+            
+            return pricePromise.then(price => ({
+                hotelID: element.hotel,
+                bookingID: element.bookingID,
+                single: element.singleCount,
+                double: element.doubleCount,
+                twin: element.twinCount,
+                penthouse: element.penthouseCount,
+                startDate: element.startDate,
+                endDate: element.endDate,
+                price: price
+            }));
+        });
+
+        const output = await Promise.all(pricePromises);
+
+        res.json(output);
+
+    } catch (err) {
+        console.error('Database or Price Calculation error:', err.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/api/getHotel', (req, res) => {
+    const query = buildGetterQuery(req.body.hotelID, 'Hotels', 'hotelID');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
         return;
@@ -176,9 +225,9 @@ app.post('/api/login', (req, res) => {
         if(!user) {
         return res.status(404).json({ error: 'User not found.' });
     }
-    const checkPW = loginUtil.checkPass(db, password, user.password);
+    const checkPW = loginUtil.checkPass(password, user.password);
         if(!checkPW) {
-            return res.status(401).json({ message: 'Invalid password.' });
+            return res.status(401).json({ error: 'Invalid password.' });
     }
     
     return res.status(200).json({ message: 'Login successful.', userID: user.userID });
@@ -214,7 +263,7 @@ app.post('/api/signup', (req, res) => {
     })
 })
 
-app.get('/api/getBooking', (req, res) => {
+app.post('/api/getBooking', (req, res) => {
     const userID = parseInt(req.query.userID);
 
     if(!userID) {
@@ -231,5 +280,25 @@ app.get('/api/getBooking', (req, res) => {
 
         res.status(200).json(rows);
 
+    })
+})
+
+app.post('/api/getLogin', (req, res) => {
+    const userID = parseInt(req.query.userID);
+
+    if(!userID) {
+        return res.status(401).json({ message: 'Invalid or session expired.' })
+    }
+
+    const query = 'SELECT username FROM Users WHERE userID = ?'
+
+    db.get(query, [userID], (err, user) => {
+        if(err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Database error. '})
+        }
+
+
+        return res.status(200).json({ message: 'Login successful.', username: user.username });
     })
 })
