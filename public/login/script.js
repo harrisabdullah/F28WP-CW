@@ -35,7 +35,14 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         
     })
     .catch(err => {
+<<<<<<< Updated upstream
         console.log(err)
     })
 });
 
+=======
+        console.error(err);
+            passwordError.textContent = "Invalid username or password.";
+    });
+});
+>>>>>>> Stashed changes
