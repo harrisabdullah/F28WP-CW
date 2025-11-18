@@ -1,125 +1,164 @@
-/* General page styles */
+/* ------------------------------ */
+/* GLOBAL BASE STYLES             */
+/* ------------------------------ */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-    color: #333;
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+background: #f5f7fa;
+color: #333333;
+line-height: 1.5;
 }
 
-/* Hotel heading section */
+/* Headings */
+h1 {
+font-size: 32px;
+font-weight: bold;
+margin: 0;
+}
+h2 {
+font-size: 22px;
+color: #555;
+font-weight: bold;
+}
+h3 {
+font-size: 18px;
+color: #666;
+}
+
+/* ------------------------------ */
+/* HEADER                         */
+/* ------------------------------ */
+header {
+background: #3b4cca;
+padding: 20px;
+display: flex;
+gap: 15px;
+justify-content: flex-start;
+align-items: center;
+}
+
+header .back-btn {
+background: #6a7fff;
+color: white;
+padding: 8px 15px;
+border-radius: 6px;
+text-decoration: none;
+font-size: 15px;
+transition: background 0.3s;
+}
+
+header .back-btn:hover {
+background: #5a6de0;
+}
+
+/* ------------------------------ */
+/* HOTEL HEADING SECTION          */
+/* ------------------------------ */
 .hotel-heading {
-    text-align: center;
-    background-color: #fff;
-    padding: 30px 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+max-width: 900px;
+margin: 30px auto;
+padding: 25px;
+background: #ffffff;
+border-radius: 10px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+text-align: center;
 }
 
-.hotel-heading h1 {
-    margin: 0;
-    font-size: 2.5em;
-    color: #2c3e50;
+#hotel-image {
+width: 100%;
+max-height: 250px;
+object-fit: cover;
+border-radius: 10px;
+margin-top: 15px;
 }
 
-.hotel-heading h2 {
-    margin: 5px 0;
-    font-size: 1.5em;
-    color: #34495e;
-}
-
-.hotel-heading h3 {
-    margin: 5px 0 15px 0;
-    font-size: 1.2em;
-    color: #e67e22;
-}
-
-.hotel-heading img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-top: 15px;
-}
-
-.back-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  padding: 20px 36px;
-  background: #ffffff;
-  color: rgb(39, 37, 37);
-  text-decoration: none;
-  border-radius: 6px;
-}
-
-/* Booking dates */
+/* ------------------------------ */
+/* DATE SUMMARY SECTION           */
+/* ------------------------------ */
 .dates {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-radius: 10px;
+max-width: 900px;
+margin: 20px auto;
+padding: 20px;
+background: #ffffff;
+border-radius: 10px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+display: flex;
+justify-content: space-between;
+gap: 15px;
+font-size: 15px;
 }
 
 .dates div {
-    font-size: 1.1em;
+font-weight: bold;
+color: #333;
 }
 
-/* Room list */
+/* ------------------------------ */
+/* ROOM LIST (chips style)        */
+/* ------------------------------ */
 ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0 20px 20px 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
+max-width: 900px;
+margin: 20px auto;
+padding: 0;
+list-style: none;
 }
 
-ul div {
-    background-color: #fff;
-    padding: 15px;
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-    font-size: 1em;
+ul > div {
+background: #f0f2ff;
+border: 1px solid #3b4cca;
+padding: 10px;
+border-radius: 6px;
+margin-bottom: 12px;
+display: flex;
+justify-content: space-between;
+font-weight: bold;
+color: #333;
 }
 
-/* Total price */
+/* ------------------------------ */
+/* TOTAL PRICE                    */
+/* ------------------------------ */
 #total-price {
-    text-align: center;
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #27ae60;
-    background-color: #fff;
-    padding: 20px;
-    margin: 0 20px 20px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+max-width: 900px;
+margin: 20px auto;
+padding: 20px;
+font-size: 20px;
+font-weight: bold;
+background: #ffffff;
+border-radius: 10px;
+box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+text-align: right;
 }
 
+/* ------------------------------ */
+/* BOOK BUTTON                    */
+/* ------------------------------ */
 #book-button {
-    display: block;
-    margin: 20px auto;
-    padding: 15px 40px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #fff;
-    background-color: #e67e22;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+display: block;
+margin: 25px auto 40px;
+padding: 14px 25px;
+background: #3b4cca;
+color: white;
+font-size: 16px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+width: 250px;
+transition: background 0.3s;
 }
 
 #book-button:hover {
-    background-color: #d35400;
-    transform: scale(1.05);
+background: #2f3ca5;
 }
 
-#book-button:active {
-    background-color: #c0392b;
-    transform: scale(0.98);
+/* ------------------------------ */
+/* MOBILE                          */
+/* ------------------------------ */
+@media (max-width: 600px) {
+.dates {
+flex-direction: column;
+text-align: center;
+}
+
 }
