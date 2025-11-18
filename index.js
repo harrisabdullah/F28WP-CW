@@ -119,7 +119,7 @@ app.post('/api/cancelBooking', async (req, res) => {
     })
 })
 
-app.get('/api/getBookings', (req, res) => {
+app.post('/api/getBookings', (req, res) => {
     const query = buildGetterQuery(req.body, 'Bookings', 'user');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
@@ -135,7 +135,7 @@ app.get('/api/getBookings', (req, res) => {
     })
 })
 
-app.get('/api/getHotel', (req, res) => {
+app.post('/api/getHotel', (req, res) => {
     const query = buildGetterQuery(req.body, 'Hotels', 'hotelID');
     if (query == -1){
         res.status(400).json({ error: 'Invalid request' });
@@ -214,7 +214,7 @@ app.post('/api/signup', (req, res) => {
     })
 })
 
-app.get('/api/getBooking', (req, res) => {
+app.post('/api/getBooking', (req, res) => {
     const userID = parseInt(req.query.userID);
 
     if(!userID) {

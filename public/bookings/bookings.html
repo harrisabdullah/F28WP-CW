@@ -1,54 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Hotels</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Manage Bookings</title>
+ <link rel="stylesheet" href="style.css">
+ <script src="script.js" defer></script>
 </head>
 <body>
 
-    <header>
-        <h1>Oops! Something Went Wrong</h1>
-    </header>
+ <header>
+ <h1>Manage Your Bookings</h1>
+ </header>
 
-    <main>
-        <section id="error-container">
-            <p id="error-message">An error occurred. Please try again later.</p>
-            <a href="/" class="home-button">Back to Home</a>
-    </header>
-
-    <main>
-        <section class="search-container">
-            <form id="search-form">
-                <div class="form-group">
-                    <label for="destination">Destination</label>
-                    <input type="text" id="destination" name="destination" placeholder="e.g., Edinburgh" required>
-                </div>
-                <div class="form-group">
-                    <label for="check-in">Check-in</label>
-                    <input type="date" id="check-in" name="check-in" required>
-                </div>
-                <div class="form-group">
-                    <label for="check-out">Check-out</label>
-                    <input type="date" id="check-out" name="check-out" required>
-                </div>
-                <div class="form-group">
-                    <label for="guests">Guests</label>
-                    <input type="number" id="guests" name="guests" min="1" value="1" required>
-                </div>
-                <button type="submit" class="search-button">Search</button>
-            </form>
-        </section>
-
-        <section id="results-container">
-            <h2>Results</h2>
-            <div id="results-grid">
-                </div>
->>>>>>> 4a92cc7dc11c08cb547e182d0f3360b6efb96d27
-        </section>
-    </main>
+ <main>
+ <section id="bookings-container">
+ <h2>Your Bookings</h2>
+ <p id="loading-message" class="loading-message">Loading bookings...</p> <!-- Added class for potential styling -->
+ <div id="bookings-grid"></div>
+ </section>
+ </main>
 
 </body>
 </html>
