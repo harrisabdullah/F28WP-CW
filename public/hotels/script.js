@@ -31,6 +31,14 @@ function loadQuery() {
     };
 }
 
+function getCookie(name) {
+        return document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="))
+        ?.split("=")[1];
+}
+
+
 function daysBetween(startStr, endStr) {
     const start = new Date(startStr);
     const end = new Date(endStr);
@@ -77,6 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!Number.isInteger(hotelID)){
         // TODO: error page
     }
+    const userID = Number(getCookie('userID'));
+    if (!Number.isInteger(userID)){
+        // TODO: error page
+    }
     fetch("/api/getHotel", {
         method: 'POST',
         headers: {
@@ -96,5 +108,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const query = loadQuery();
         const price = getPrice(hotel, query);
         updateHTML(hotel, query, price);
+
+        document.getElementById("book-button").addEventListener("click", () => {
+            fetch("/api/makeBooking",{
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    userID: userID,
+                    hotelID: hotelID,
+                    startDate: query.startDate,
+                    endDate: query.endDate,
+                    roomConfig: {
+                        single: query.single,
+                        double: query.double,
+                        twin: query.twin,
+                        penthouse: query.penthouse
+                    }
+                })
+            }).then(res => {
+                if (!res.ok) {
+                    throw new Error('Login failed. Please check your credentials.');
+                }
+                return res.json();
+            }).then(data => {
+                console.log({data});
+            })
+        })
     })
-});
+})
