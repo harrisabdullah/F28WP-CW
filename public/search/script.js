@@ -19,6 +19,26 @@ document.addEventListener('DOMContentLoaded', () => {
         ?.split("=")[1];
     }
 
+    function daysBetween(startStr, endStr) {
+    const start = new Date(startStr);
+    const end = new Date(endStr);
+
+    const diffMs = end - start;
+    return Math.round(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function getPrice(hotel, query, start, end) {
+    const duration = daysBetween(start, end);
+
+    const price =
+        ((hotel.singleRoomPrice * query.single) +
+        (hotel.doubleRoomPrice * query.double) +
+        (hotel.twinRoomPrice * query.twin) +
+        (hotel.penthousePrice * query.penthouse))
+        * duration;
+
+    return price;
+    }
     
 
     
@@ -164,14 +184,14 @@ function clearCookie(name, path = '/', domain = '') {
         sessionStorage.setItem('twin', roomConfig.twin);
         sessionStorage.setItem('penthouse', roomConfig.penthouse);
 
-        displayResults(hotels);
+        displayResults(hotels, roomConfig, checkIn, checkOut);
 
         } catch (error) {
             resultsContainer.innerHTML = `<p class="error">Something went wrong while searching.</p>`;
         }
     });
 
-    function displayResults(hotels) {
+    function displayResults(hotels, roomConfig, start, end) {
         resultsContainer.innerHTML = '';
 
         if (!hotels || hotels.length === 0) {
@@ -181,13 +201,15 @@ function clearCookie(name, path = '/', domain = '') {
 
         hotels.forEach(hotel => {
             const hotelCard = document.createElement('article');
+            const price = getPrice(hotel, roomConfig, start, end);
             hotelCard.className = 'hotel-card';
             
             hotelCard.innerHTML = `
                 <img src="${hotel.image}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
-                <p>${hotel.description}</p>         
-                <a href = "/hotels/${hotel.hotelID}"> Book Now </a>`;
+                <p>${hotel.description}</p>   
+                <p>${price}</p>      
+                <a href = "/hotels/$${hotel.hotelID}"> Book Now </a>`;
             
             resultsContainer.appendChild(hotelCard);
         });
