@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
           message.textContent = "Hold on tight!!";
 
-        // 2. (For now) Log the data to the console to make sure it's working
+    
         console.log('Search criteria:', {
             usernameInput,
             passwordInput,
