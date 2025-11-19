@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const checkOut = document.getElementById('check-out').value;
         const guests = document.getElementById('guests').value;
 
-        // 2. (For now) Log the data to the console to make sure it's working
         console.log('Search criteria:', {
             destination,
             checkIn,
@@ -24,25 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             guests
         });
 
-        // 3. This is where we will call our API
-        // Group members working on the API will advise how to
-        // use 'fetch' to send this data and get results.
-        
-        // Example of what the API call might look like:
-        /*
-        fetch(`https://your-group-api.com/search?dest=${destination}&checkin=${checkIn}&checkout=${checkOut}`)
-            .then(response => response.json())
-            .then(data => {
-                // 'data' is the list of hotels from the API
-                displayResults(data);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = '<p>Sorry, something went wrong. Please try again.</p>';
-            });
-        */
-        
-        // For testing, we can add a fake result:
+       
         resultsContainer.innerHTML = `
             <article class="hotel-card">
                 <h3>Test Hotel in ${destination}</h3>
